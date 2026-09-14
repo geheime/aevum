@@ -11,6 +11,27 @@ without losing anything. **The project accumulates instead of repeating.**
 *Aevum* is the scholastic word for the mode of being of something that **has a
 beginning but no end**. The project is aeviternal; the instances are not.
 
+## Who this is for
+
+You keep a long-lived coding project going across many AI sessions, and you have
+hit at least one of these walls:
+
+- **"It forgot everything from yesterday."** Every new session starts cold and
+  re-derives what the last one already knew. → the **baton** carries the line
+  forward, written from disk so it cannot drift.
+- **"Two agents overwrote each other."** You run agents in parallel and their
+  work collides. → the **MESA** shows who is on what right now, and a
+  **compare-and-swap** makes overwriting another's testimony impossible-without-
+  noticing.
+- **"An agent crashed mid-task and left junk owned by nobody."** → **reclaim**
+  lets the next instance detect and clean the corpse, because the dying one
+  never can.
+
+If you run one agent, one session at a time, you do not need this. The moment you
+go **multi-session or multi-agent** and coordination starts biting, this is the
+shape that stops the bleeding — the same problems expert practitioners are
+filing as open issues against other agent frameworks today.
+
 ## I did not invent this shape. I recognized it.
 
 None of the mechanisms are new. Aevum is **optimistic concurrency** (a
