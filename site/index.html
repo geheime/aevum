@@ -369,13 +369,13 @@
       if(py>=entTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);const ty=(py-entTop)/entH;if(ty<0.14||ty>0.86)lum=Math.max(lum,0.66*e);}
     } else {   // Knossos: cornisa con buñas + friso de discos + arquitrabe
       const corniceTop=top,corniceH=Hm*0.044,corniceBot=corniceTop+corniceH;
-      const friezeTop=corniceBot+Hm*0.008,friezeH=Hm*0.088,friezeBot=friezeTop+friezeH;
-      const archTop=friezeBot+Hm*0.008,archH=Hm*0.040;entBot=archTop+archH;
+      const friezeTop=corniceBot+Hm*0.006,friezeH=Hm*0.072,friezeBot=friezeTop+friezeH;
+      const archTop=friezeBot+Hm*0.006,archH=Hm*0.040;entBot=archTop+archH;
       if(py>=corniceTop&&py<corniceBot){const cw=cornHalf*1.04;if(d<=cw){const ty=(py-corniceTop)/corniceH;
         if(!(Math.abs(ty-0.58)<0.12)){let e=Math.min(1,((cw-d)/cw)/0.05);let cl=0.54*e;if(ty<0.16||ty>0.9)cl=Math.max(cl,0.68*e);lum=Math.max(lum,cl*(px<cx?1.02:0.95));}}}   // buña ~0.58
-      if(py>=friezeTop&&py<friezeBot&&d<=cornHalf*0.98){const midY=(friezeTop+friezeBot)/2,discR=Hm*0.042,pitchD=Hm*0.135;
+      if(py>=friezeTop&&py<friezeBot&&d<=cornHalf*0.98){const midY=(friezeTop+friezeBot)/2,discR=Hm*0.036,pitchD=Hm*0.086;
         const idx=Math.round((px-cx)/pitchD),xc=cx+idx*pitchD,dd=Math.hypot(px-xc,py-midY);
-        if(dd<=discR){const cl=0.74*(dd<discR*0.70?1:(discR-dd)/(discR*0.30));lum=Math.max(lum,cl);}}   // friso de discos: pocos, grandes, redondos (gaps en void)
+        if(dd<=discR){const cl=0.72*(1-0.18*Math.pow(dd/discR,2));lum=Math.max(lum,cl);}}   // friso de discos fino (gaps en void)
       if(py>=archTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);if((py-archTop)/archH<0.22)lum=Math.max(lum,0.66*e);}
     }
     // capitel cushion (almohadón) + banda oscura + fuste
