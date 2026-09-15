@@ -14,7 +14,7 @@ Command body (sketch):
 ```
 Follow rituals/boot.md for the house named in $ARGUMENTS.
 Resolve the baton, record its sha, triple-check against git and the tracker,
-run reclaim.sh all <house>/_MESA.md, read mesa.sh live, and present a plan in
+run reclaim.sh all <house>/_ROUNDTABLE.md, read roundtable.sh live, and present a plan in
 plan mode. Touch nothing until approved. On approval, append the CLAIM.
 ```
 

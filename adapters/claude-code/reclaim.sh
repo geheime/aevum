@@ -6,7 +6,7 @@
 #              side — the one who cleans the corpse is the NEXT instance, not the
 #              dying one.
 #
-# WHY A .sh AND NOT INLINE (same as mesa.sh): awk's $N collide with a host
+# WHY A .sh AND NOT INLINE (same as roundtable.sh): awk's $N collide with a host
 #   command's positional-argument substitution (a boot with a multi-word arg
 #   replaces $1,$2,… with the arg's words) → a mute parser that LIES. A real .sh
 #   has no slash-command expansion. The ritual text only CALLS it.
@@ -22,11 +22,11 @@
 #      every turn. Its mtime says how long ago that session breathed.
 #
 # Usage:
-#   reclaim.sh playwright [--dry]          # Layer 1: sweep orphaned Chrome locks (default: sweep)
-#   reclaim.sh claims <MESA_FILE>          # Layer 2: report live/doubtful/orphaned CLAIMs (does NOT mutate the MESA)
-#   reclaim.sh all <MESA_FILE> [--dry]     # both, for the boot ritual
+#   reclaim.sh playwright [--dry]              # Layer 1: sweep orphaned Chrome locks (default: sweep)
+#   reclaim.sh claims <ROUNDTABLE_FILE>        # Layer 2: report live/doubtful/orphaned CLAIMs (does NOT mutate the round table)
+#   reclaim.sh all <ROUNDTABLE_FILE> [--dry]   # both, for the boot ritual
 #
-# Layer 2 NEVER deletes from the MESA (append-only + no total certainty): it only
+# Layer 2 NEVER deletes from the round table (append-only + no total certainty): it only
 # REPORTS. Reclaiming an orphaned CLAIM is a human decision at seating. Layer 2
 # prints the RELEASE line ready to copy, with the dead `<role> @ <front>` EXACT —
 # the key must CLONE the CLAIM letter for letter or the RELEASE will not match and
@@ -41,16 +41,16 @@ PW_CACHE="${RECLAIM_PW_CACHE:-$HOME/Library/Caches/ms-playwright-mcp}"   # overr
 PROJECTS="${RECLAIM_PROJECTS:-$HOME/.claude/projects}"                   # override for tests
 LIVE_SEC="${RECLAIM_LIVE_SEC:-600}"    # < 10min without breathing = ALIVE
 DEAD_SEC="${RECLAIM_DEAD_SEC:-3600}"   # ≥ 1h without breathing = likely ORPHAN ; in between = DOUBTFUL
-MESA_SH="${MESA_SH:-}"                  # override for tests / non-standard install
+ROUNDTABLE_SH="${ROUNDTABLE_SH:-}"      # override for tests / non-standard install
 
-# resolve the mesa.sh parser: sibling in a flat install (~/.claude/bin) or
+# resolve the roundtable.sh parser: sibling in a flat install (~/.claude/bin) or
 # ../../bin in the repo layout (adapters/claude-code/). Fail LOUD if absent — a
 # silenced parser call IS the false-clean this system exists to prevent
-# (red-team CRIT1: reclaim in adapters/, mesa.sh in bin/, NOT siblings).
-resolve_mesa() {
+# (red-team CRIT1: reclaim in adapters/, roundtable.sh in bin/, NOT siblings).
+resolve_roundtable() {
   local d c; d="$(cd "$(dirname "$0")" && pwd)"
-  if [ -n "$MESA_SH" ] && [ -x "$MESA_SH" ]; then printf '%s\n' "$MESA_SH"; return 0; fi
-  for c in "$d/mesa.sh" "$d/../../bin/mesa.sh"; do
+  if [ -n "$ROUNDTABLE_SH" ] && [ -x "$ROUNDTABLE_SH" ]; then printf '%s\n' "$ROUNDTABLE_SH"; return 0; fi
+  for c in "$d/roundtable.sh" "$d/../../bin/roundtable.sh"; do
     [ -f "$c" ] && { printf '%s\n' "$c"; return 0; }
   done
   return 1
@@ -59,7 +59,7 @@ resolve_mesa() {
 cmd="${1:-}"
 
 usage() {
-  echo "usage: reclaim.sh playwright [--dry|--kill]  |  reclaim.sh claims <MESA_FILE>  |  reclaim.sh all <MESA_FILE> [--dry]" >&2
+  echo "usage: reclaim.sh playwright [--dry|--kill]  |  reclaim.sh claims <ROUNDTABLE_FILE>  |  reclaim.sh all <ROUNDTABLE_FILE> [--dry]" >&2
   echo "       --kill: kills the ALIVE-BUT-OWNERLESS chrome (Layer 1b) and sweeps Singleton*. By hand only, never from boot." >&2
   exit 2
 }
@@ -134,20 +134,20 @@ reclaim_playwright() {
   echo "  → Playwright: $alive in use, $swept orphan(s), $zombies alive-ownerless${dry:+ (dry)}${kill_mode:+ (kill)}."
 }
 
-# ── Layer 2 ── orphaned CLAIM on the MESA ─────────────────────────────────────
+# ── Layer 2 ── orphaned CLAIM on the round table ──────────────────────────────
 # For each live front (CLAIM without RELEASE), resolve its session transcript and
-# classify by heartbeat age. Does NOT mutate the MESA — only reports.
+# classify by heartbeat age. Does NOT mutate the round table — only reports.
 reclaim_claims() {
-  local mesa="${1:-}"
-  [ -n "$mesa" ] || usage
-  if [ ! -f "$mesa" ]; then echo "  · MESA: does not exist ($mesa) — nothing to review"; return 0; fi
+  local rt="${1:-}"
+  [ -n "$rt" ] || usage
+  if [ ! -f "$rt" ]; then echo "  · round table: does not exist ($rt) — nothing to review"; return 0; fi
 
   # consume the NORMALIZED output (--tsv: date \t role \t "role @ front" \t session).
-  # The structural parser lives ONCE, in mesa.sh — resolved with fail-loud.
-  local mesa_sh
-  mesa_sh="$(resolve_mesa)" || { echo "  ✗ reclaim: mesa.sh not found (tried sibling and ../../bin; set MESA_SH). ABORTING — I will not check the MESA blind." >&2; return 2; }
+  # The structural parser lives ONCE, in roundtable.sh — resolved with fail-loud.
+  local rt_sh
+  rt_sh="$(resolve_roundtable)" || { echo "  ✗ reclaim: roundtable.sh not found (tried sibling and ../../bin; set ROUNDTABLE_SH). ABORTING — I will not check the round table blind." >&2; return 2; }
   local live_lines
-  live_lines="$("$mesa_sh" live "$mesa" --tsv)" || { echo "  ✗ reclaim: mesa.sh exited with an error (MESA ILLEGIBLE?) — check by hand, I do NOT assume clean." >&2; return 2; }
+  live_lines="$("$rt_sh" live "$rt" --tsv)" || { echo "  ✗ reclaim: roundtable.sh exited with an error (ROUND TABLE UNREADABLE?) — check by hand, I do NOT assume clean." >&2; return 2; }
   local now; now=$(date +%s)
   local vivos=0 dudosos=0 orphans=0 any=0
   local fecha rol frente sess
@@ -173,7 +173,7 @@ reclaim_claims() {
     local age=0
     if [ "$best" -eq 0 ]; then
       echo "  🩸 ORPHAN?:   $frente · sesión $sess — NO transcript (absent). Candidate for a reclaimed RELEASE."
-      echo "     ↳ append to the MESA (with the current date):  $frente · RELEASE · sesión $sess · reclaimed-by <your-id>"
+      echo "     ↳ append to the round table (with the current date):  $frente · RELEASE · sesión $sess · reclaimed-by <your-id>"
       orphans=$((orphans+1)); continue
     fi
     age=$((now-best))
@@ -182,7 +182,7 @@ reclaim_claims() {
       vivos=$((vivos+1))
     elif [ "$age" -ge "$DEAD_SEC" ]; then
       echo "  🩸 ORPHAN?:   $frente · sesión $sess — no heartbeat for $((age/60))min (≥$((DEAD_SEC/60))min). Candidate for a reclaimed RELEASE."
-      echo "     ↳ append to the MESA (with the current date):  $frente · RELEASE · sesión $sess · reclaimed-by <your-id>"
+      echo "     ↳ append to the round table (with the current date):  $frente · RELEASE · sesión $sess · reclaimed-by <your-id>"
       orphans=$((orphans+1))
     else
       echo "  🟡 DOUBTFUL:  $frente · sesión $sess — no heartbeat for $((age/60))min. Live-idle or dead? Ask a human."
@@ -190,7 +190,7 @@ reclaim_claims() {
     fi
   done <<< "$live_lines"
 
-  if [ "$any" -eq 0 ]; then echo "  · MESA clean — no live fronts to review."; return 0; fi
+  if [ "$any" -eq 0 ]; then echo "  · round table clean — no live fronts to review."; return 0; fi
   echo "  → CLAIM: $vivos alive, $dudosos doubtful, $orphans orphan(s). (orphan/doubtful = surface it; a human appends the RELEASE)."
 }
 
@@ -204,12 +204,12 @@ case "$cmd" in
     esac ;;
   claims)     reclaim_claims "${2:-}" ;;
   all)
-    mesa="${2:-}"; [ -n "$mesa" ] || usage
+    rt="${2:-}"; [ -n "$rt" ] || usage
     dry=""; [ "${3:-}" = "--dry" ] && dry="dry"
     echo "🧹 reclaim — Layer 1 (Playwright):"
     reclaim_playwright "$dry"
-    echo "🧹 reclaim — Layer 2 (orphaned CLAIMs on the MESA):"
-    reclaim_claims "$mesa"
+    echo "🧹 reclaim — Layer 2 (orphaned CLAIMs on the round table):"
+    reclaim_claims "$rt"
     ;;
   *) usage ;;
 esac

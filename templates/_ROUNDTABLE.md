@@ -1,4 +1,4 @@
-# MESA — <house>
+# ROUND TABLE — <house>
 
 > Live coordination board between parallel instances.
 > APPEND-ONLY: add at the bottom, never edit or delete a line above.

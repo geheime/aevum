@@ -9,7 +9,7 @@ Command body (sketch):
 Follow rituals/close.md for the current seat.
 Log and distill; reconcile against disk; write the baton via
 baton-cas.sh write <baton> <boot-sha> — on CONFLICT, merge with disk and retry;
-RELEASE the front on the MESA (exact key); append the lineage node.
+RELEASE the front on the round table (exact key); append the lineage node.
 ```
 
 The critical binding is the **boot sha**: the `/boot` command recorded it when it

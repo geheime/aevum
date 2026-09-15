@@ -7,7 +7,7 @@
 ## Who I am on sitting down
 <role + the one line of where I come from, in 2–3 lines>
 
-## Verified current state (checked at close against git + tracker + MESA)
+## Verified current state (checked at close against git + tracker + round table)
 - <state, each item cross-checked against the raw source, not inferred>
 
 ## The line (where we came from → where we're going)
