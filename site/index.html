@@ -353,8 +353,8 @@
     dpr=Math.min(window.devicePixelRatio||1,2);
     W=window.innerWidth;H=window.innerHeight;   // viewport real (evita el clientWidth inflado por overflow)
     cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-    cell=Math.max(3,Math.round(Math.min(W,H)/150));
     const Wm=Math.min(W*0.82,H*0.50), Hm=Wm*0.62;   // ancho con margen; alto derivado
+    cell=Math.max(2,Math.round(Wm/135));   // celda ATADA al templo (no al viewport): ratio Wm/cell≈135 = el de la og → el friso de discos resuelve limpio en cualquier pantalla
     M={cx:W/2, top:H*0.46-Hm, Hm, Wm};   // base del templo ~46%; el wordmark arranca en 50svh → bloque centrado, gap limpio
   }
   function lumAt(px,py){
