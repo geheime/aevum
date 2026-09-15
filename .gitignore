@@ -1,0 +1,13 @@
+# scratch de exploración de marca (no va al repo)
+brand/_*
+brand/*frames/
+brand/preview/
+brand/pillar-proto.html
+brand/colonnade-board.html
+brand/execution-panel.html
+brand/temenos-panel.html
+brand/aevum-pillar.mp4
+
+.DS_Store
+.wrangler/
+node_modules/

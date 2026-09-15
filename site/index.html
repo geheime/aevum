@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>aevum</title>
+<meta name="description" content="A file protocol for running permanent projects with disposable agents. The instance is mortal. The project is not.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="aevum">
+<meta property="og:description" content="A file protocol for running permanent projects with disposable agents. The instance is mortal. The project is not.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aevum-os.pages.dev">
+<meta property="og:image" content="https://aevum-os.pages.dev/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="aevum">
+<meta name="twitter:description" content="A file protocol for running permanent projects with disposable agents.">
+<meta name="twitter:image" content="https://aevum-os.pages.dev/og-cover.png">
+<style>
+  :root{
+    --void:#0A0C10; --panel:#0d1016; --ink:#ECE6D6; --silver:#9FB2C6; --steel:#4C6076; --dim:#6F7C8A; --line:#1c2129;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:840px;margin:0 auto;padding:0 24px}
+
+  /* ---- masthead ---- */
+  .top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+    padding:14px 24px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+    background:linear-gradient(to bottom,rgba(10,12,16,.85),rgba(10,12,16,0));backdrop-filter:blur(6px)}
+  .top b{color:var(--ink);font-weight:600;letter-spacing:.34em}
+  .top a{text-decoration:none;color:var(--dim);transition:color .2s} .top a:hover{color:var(--ink)}
+
+  /* ---- hero ---- */
+  .hero{position:relative;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding-bottom:24px}
+  #glyph{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:0 auto;padding:0 24px}
+  .word{font-size:clamp(34px,7vw,66px);letter-spacing:.46em;padding-left:.46em;font-weight:500}
+  .tag{margin-top:16px;font-size:clamp(9px,1.6vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--dim)}
+  .lede{margin:24px auto 0;max-width:520px;font-size:13px;color:var(--silver);letter-spacing:.02em}
+  .scroll{margin-top:28px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+  /* ---- sections ---- */
+  section{padding:96px 0;border-top:1px solid var(--line)}
+  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:22px}
+  h2{font-size:clamp(22px,3.4vw,34px);font-weight:500;letter-spacing:-.01em;line-height:1.3;color:var(--ink)}
+  h2 .q{color:var(--silver)}
+  p{color:var(--silver);margin-top:18px;max-width:64ch}
+  p .ink{color:var(--ink)}
+  .big{font-size:clamp(24px,4.2vw,40px);line-height:1.32;color:var(--ink);font-weight:500;letter-spacing:-.01em}
+  .big .dim{color:var(--steel)}
+
+  .arts{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+  .art{background:var(--panel);padding:26px 24px}
+  .art .n{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
+  .art h3{font-size:17px;font-weight:600;color:var(--ink);margin:10px 0 8px;letter-spacing:.02em}
+  .art p{font-size:13px;margin-top:0;color:var(--silver)}
+  @media(min-width:720px){.arts{grid-template-columns:repeat(2,1fr)}}
+
+  ul.mech{list-style:none;margin-top:28px;display:grid;gap:14px}
+  ul.mech li{padding-left:22px;position:relative;color:var(--silver);font-size:14px}
+  ul.mech li::before{content:"›";position:absolute;left:0;color:var(--steel)}
+  ul.mech b{color:var(--ink);font-weight:600}
+
+  .crete{color:var(--silver)}
+  .crete em{color:var(--ink);font-style:italic}
+
+  pre{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 18px;
+    font-size:13px;color:var(--silver);overflow-x:auto}
+  pre .c{color:var(--steel)}
+
+  .cta{display:inline-flex;align-items:center;gap:10px;margin-top:30px;padding:13px 20px;border:1px solid var(--steel);border-radius:8px;
+    color:var(--ink);text-decoration:none;font-size:13px;letter-spacing:.06em;transition:border-color .2s,background .2s}
+  .cta:hover{border-color:var(--silver);background:rgba(159,178,198,.05)}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 64px;text-align:center;color:var(--steel);font-size:12px;letter-spacing:.06em}
+  footer .sig{color:var(--dim);letter-spacing:.12em;margin-top:10px}
+
+  @media(max-width:520px){
+    .herotext{width:100%}
+    .word{letter-spacing:.30em;padding-left:.30em}
+    .tag{letter-spacing:.14em;font-size:10px}
+    .lede{font-size:12px;letter-spacing:0;line-height:1.6}
+    section{padding:72px 0}
+    .top{letter-spacing:.16em}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span><b>aevum</b></span>
+  <a href="https://github.com/geheime/aevum" target="_blank" rel="noopener">github ↗</a>
+</div>
+
+<header class="hero">
+  <canvas id="glyph"></canvas>
+  <div class="herotext">
+    <div class="word">aevum</div>
+    <div class="tag">The instance is mortal · The project is not</div>
+    <div class="lede">A file protocol for running permanent projects with disposable agents — baton, MESA, lineage, and a compare-and-swap for multi-agent coordination.</div>
+    <div class="scroll">scroll ↓</div>
+  </div>
+</header>
+
+<main>
+  <section><div class="wrap">
+    <div class="kick">01 — the problem</div>
+    <p class="big">An AI coding instance is <span class="dim">mortal</span> — born without memory, dead when its context window saturates. The project it works on outlives it by orders of magnitude.</p>
+    <p><span class="ink">aevum</span> is the bridge: a protocol of externalized memory strict enough that a fresh instance sits down and picks up the line without losing anything. <span class="ink">The project accumulates instead of repeating.</span> <em>Aevum</em> is the scholastic word for the mode of being of something that has a beginning but no end.</p>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">02 — the artifacts of continuity</div>
+    <h2>Three files carry the line, and a fourth stops it from being overwritten.</h2>
+    <div class="arts">
+      <div class="art"><div class="n">baton</div><h3>Looks backward</h3><p>The serial testimony one instance leaves the next, written from disk so it cannot drift. A fresh instance reads it first.</p></div>
+      <div class="art"><div class="n">MESA</div><h3>Looks sideways</h3><p>The append-only board where parallel instances coordinate right now — who is on what, so two agents don't collide.</p></div>
+      <div class="art"><div class="n">lineage</div><h3>Looks down the generations</h3><p>The genealogy, one node per close. The line is legible even after every working file is gone.</p></div>
+      <div class="art"><div class="n">compare-and-swap</div><h3>Refuses the clobber</h3><p>When two same-role instances close at once, the CAS rejects the silent overwrite and asks the later one to merge. Nothing is lost.</p></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">03 — honesty</div>
+    <h2>I did not invent this shape. <span class="q">I recognized it.</span></h2>
+    <p>None of the mechanisms are new. Aevum is:</p>
+    <ul class="mech">
+      <li><b>optimistic concurrency</b> — a compare-and-swap on the testimony a dying instance leaves behind.</li>
+      <li><b>an append-only log</b> — the board where live instances coordinate.</li>
+      <li><b>orphan reclaim with a liveness signal</b> — for the instances that crash before they clean up.</li>
+      <li><b>process handoff</b> — the baton — pointed at agent instances instead of threads and servers.</li>
+    </ul>
+    <p>The work was seeing that a coding agent is one of those mortal processes, and giving the pattern a shape a human can hold.</p>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">04 — the shape is four thousand years old</div>
+    <h2>The instance is mortal. The project rises from its ruins.</h2>
+    <p class="crete">The mark is a Minoan temple. Crete was a civilization the earthquakes destroyed again and again — <em>“after death and destruction, Crete rose from its ruins and began anew, over and over.”</em> Its columns are <em>atectonic</em>: narrower at the base, wider at the capital — the form carries the threat of collapse in its own shape, precarious by design, yet the structure holds and is rebuilt.</p>
+    <p class="crete">And Crete's gift to the world was <span class="ink">its writing</span>. So the mark is built out of characters — a grid of type that forms the temple. What survives the mortal executor is what was written down.</p>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">05 — run it yourself</div>
+    <h2>Every failure mode it defends against is a reproduced test.</h2>
+    <pre><span class="c"># 20 checks across the parser, reclaim, and the CAS</span>
+bash tests/run.sh</pre>
+    <a class="cta" href="https://github.com/geheime/aevum" target="_blank" rel="noopener">Read the protocol on GitHub ↗</a>
+  </div></section>
+</main>
+
+<footer>
+  <div>aevum · begins, never ends.</div>
+  <div class="sig">— Designed by Humans · Built by Intelligence</div>
+</footer>
+
+<script>
+(() => {
+  const cv=document.getElementById('glyph'), ctx=cv.getContext('2d');
+  const INK=[236,230,214],SIL=[159,178,198],STE=[76,96,118];
+  const GLY=['·','.',':','+','=','*','×','#'];
+  const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+  const lerp=(a,b,k)=>a+(b-a)*Math.max(0,Math.min(1,k)), clamp=v=>Math.max(0,Math.min(1,v));
+  const hash=(x,y)=>{let h=Math.sin(x*127.1+y*311.7)*43758.5453;return h-Math.floor(h);};
+  function mix(l){let a,b,k;l=clamp(l);if(l<0.5){a=STE;b=SIL;k=l/0.5;}else{a=SIL;b=INK;k=(l-0.5)/0.5;}
+    return `rgb(${a[0]+(b[0]-a[0])*k|0},${a[1]+(b[1]-a[1])*k|0},${a[2]+(b[2]-a[2])*k|0})`;}
+  function hw(t){
+    if(t<0)return 0;if(t>1)return 0;
+    if(t<0.06)return 1.00;
+    if(t<0.13)return lerp(0.94,0.80,(t-0.06)/0.07);
+    if(t<0.17)return lerp(0.80,0.72,(t-0.13)/0.04);
+    if(t<0.90){const k=(t-0.17)/0.73;return lerp(0.72,0.54,k)+Math.sin(k*Math.PI)*0.014;}
+    return lerp(0.54,0.60,(t-0.90)/0.10);
+  }
+  let W,H,dpr,cell,M;
+  function layout(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;   // viewport real (evita el clientWidth inflado por overflow)
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    cell=Math.max(3,Math.round(Math.min(W,H)/150));
+    const Wm=Math.min(W*0.82,H*0.64), Hm=Wm*0.62;   // ancho con margen; alto derivado
+    M={cx:W/2, top:H*0.135, Hm, Wm};
+  }
+  function lumAt(px,py){
+    const {cx,top,Hm,Wm}=M,n=4;
+    const colAreaW=Wm*0.80,pitch=colAreaW/n,colHW=Math.min(pitch*0.32,Hm*0.072),c0=cx-colAreaW/2;
+    const cen=[];for(let i=0;i<n;i++)cen.push(c0+pitch*(i+0.5));
+    const colSpreadHalf=(cen[n-1]-cen[0])/2+colHW,cornHalf=colSpreadHalf+pitch*0.32;
+    const pedTop=top,pedH=Hm*0.20,pedBot=pedTop+pedH;
+    const entTop=pedBot,entH=Hm*0.095,entBot=entTop+entH;
+    const colTop=entBot+Hm*0.006,colBot=top+Hm*0.86;
+    const crepTop=colBot,crepH=Hm*0.14,crepBot=crepTop+crepH;
+    const d=Math.abs(px-cx);let lum=0;
+    if(py>=pedTop&&py<pedBot){const s=cornHalf*(py-pedTop)/pedH;if(d<=s){lum=0.30;if(s-d<colHW*0.5)lum=0.60;}}
+    if(py>=entTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);const ty=(py-entTop)/entH;if(ty<0.16||ty>0.84)lum=Math.max(lum,0.66*e);}
+    if(py>=colTop&&py<colBot){const t=(py-colTop)/(colBot-colTop),hwt=hw(t)*colHW;
+      for(let i=0;i<n;i++){const dx=Math.abs(px-cen[i]);if(dx<=hwt){const round=1-Math.pow(dx/hwt,1.7),vert=1-t*0.24,left=px<cen[i]?1.05:0.9,flute=(t>0.17&&t<0.90)?(0.93+0.07*Math.cos(dx/hwt*Math.PI*3.0)):1;let cl=clamp((0.44+0.58*round)*vert*left*flute);const ef=(hwt-dx)/hwt;if(ef<0.12)cl*=ef/0.12;lum=Math.max(lum,cl);}}}
+    if(py>=crepTop&&py<crepBot){const s2=Math.floor((py-crepTop)/(crepH/3)),bh=cornHalf*(0.98+s2*0.055);if(d<=bh){let e=Math.min(1,((bh-d)/bh)/0.04);lum=Math.max(lum,0.5*e*(px<cx?1.02:0.94));}}
+    return lum;
+  }
+  function draw(T){
+    ctx.clearRect(0,0,W,H);ctx.textAlign='center';ctx.textBaseline='middle';
+    const twoPi=Math.PI*2;
+    const gx0=Math.floor((M.cx-M.Wm/2-cell*2)/cell),gx1=Math.ceil((M.cx+M.Wm/2+cell*2)/cell);
+    const gy0=Math.floor((M.top-cell)/cell),gy1=Math.ceil((M.top+M.Hm+cell)/cell);
+    for(let gy=gy0;gy<gy1;gy++)for(let gx=gx0;gx<gx1;gx++){
+      const px=gx*cell+cell/2,py=gy*cell+cell/2;let lum=lumAt(px,py),isEdge=false;
+      if(lum>0.14){if(Math.min(lumAt(px+cell,py),lumAt(px-cell,py),lumAt(px,py+cell),lumAt(px,py-cell))<0.10)isEdge=true;}
+      if(lum<=0.05){if(lum<0.005){const near=lumAt(px+cell,py)+lumAt(px-cell,py)+lumAt(px,py+cell)+lumAt(px,py-cell);if(near>0.15){const orb=0.5+0.5*Math.sin(twoPi*T+hash(gx,gy)*twoPi);if(hash(gx*1.7,gy*1.3)<0.10*orb)lum=hash(gy,gx)*0.24*orb;}}if(lum<=0.05)continue;}
+      const seed=hash(gx,gy),flick=0.84+0.16*Math.sin(twoPi*T+seed*twoPi+gx*0.18+gy*0.14);let L=lum*flick;
+      const bay=BAYER[gy&3][gx&3]/16;if(L<bay*0.5&&!isEdge)continue;if(isEdge)L=Math.max(L,0.55);
+      const col=mix(L);
+      if(!isEdge&&hash(gx*1.3,gy*0.7)<0.11&&L>0.24){const gi=(Math.floor(T*8+seed*8))%GLY.length;ctx.globalAlpha=Math.min(1,L*0.92);ctx.fillStyle=col;ctx.font=`${Math.round(cell*1.5)}px ${'ui-monospace,Menlo,monospace'}`;ctx.fillText(GLY[gi],px,py);}
+      else{const s=cell*(isEdge?0.6:(0.44+0.5*L));ctx.globalAlpha=Math.min(1,L*1.05);ctx.fillStyle=col;ctx.fillRect(px-s/2,py-s/2,s,s);}
+    }
+    ctx.globalAlpha=1;
+  }
+  layout();window.addEventListener('resize',layout);
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let vis=true;
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;},{threshold:0}).observe(cv);
+  const T0=performance.now();
+  if(reduce){ draw(0.3); }
+  else (function loop(now){ if(vis) draw(((now-T0)/6000)%1); requestAnimationFrame(loop); })(performance.now());
+})();
+</script>
+</body>
+</html>

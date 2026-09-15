@@ -1,6 +1,19 @@
+<div align="center">
+
+<img src="brand/og-cover.png" alt="aevum — the instance is mortal, the project is not" width="880">
+
 # Aevum
 
 **A file protocol for running permanent projects with disposable agents.**
+
+[![tests](https://github.com/geheime/aevum/actions/workflows/tests.yml/badge.svg)](https://github.com/geheime/aevum/actions/workflows/tests.yml)
+&nbsp;![license: MIT](https://img.shields.io/badge/license-MIT-9FB2C6)
+
+*The instance is mortal. The project is not.*
+
+**[aevum-os.pages.dev →](https://aevum-os.pages.dev)**
+
+</div>
 
 An AI coding instance is *mortal*: born without memory, dead when its context
 window saturates. The project it works on is *immortal* — it outlives any single

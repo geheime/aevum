@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aevum — temple in motion</title>
+<style>
+  :root{ --void:#0A0C10; --ink:#ECE6D6; --silver:#9FB2C6; --steel:#4C6076; --dim:#6F7C8A;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--void)}
+  body{color:var(--ink);font-family:var(--mono);overflow:hidden}
+  #c{position:fixed;inset:0;width:100%;height:100%}
+  .plate{position:fixed;left:0;right:0;bottom:7%;text-align:center;pointer-events:none}
+  .word{font-size:clamp(28px,5vw,50px);letter-spacing:.46em;padding-left:.46em;color:var(--ink);font-weight:500}
+  .tag{margin-top:15px;font-size:clamp(9px,1.4vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--dim)}
+  .corner{position:fixed;top:18px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
+  .corner.l{left:20px} .corner.r{right:20px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="corner l">aevum</div>
+<div class="corner r">begins, never ends.</div>
+<canvas id="c"></canvas>
+<div class="plate"><div class="word">aevum</div><div class="tag">The instance is mortal · The project is not</div></div>
+<script>
+(() => {
+  const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+  const INK=[236,230,214],SIL=[159,178,198],STE=[76,96,118];
+  const GLY=['·','.',':','+','=','*','×','#'];
+  const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+  const lerp=(a,b,k)=>a+(b-a)*Math.max(0,Math.min(1,k)), clamp=v=>Math.max(0,Math.min(1,v));
+  const hash=(x,y)=>{let h=Math.sin(x*127.1+y*311.7)*43758.5453;return h-Math.floor(h);};
+  function mix(l){let a,b,k;l=clamp(l);if(l<0.5){a=STE;b=SIL;k=l/0.5;}else{a=SIL;b=INK;k=(l-0.5)/0.5;}
+    return `rgb(${a[0]+(b[0]-a[0])*k|0},${a[1]+(b[1]-a[1])*k|0},${a[2]+(b[2]-a[2])*k|0})`;}
+  function hw(t){ // columna atectónica minoica: angosta abajo, ancha arriba (Zátonyi)
+    if(t<0)return 0;if(t>1)return 0;
+    if(t<0.06)return 1.00;                                   // ábaco (lo más ancho)
+    if(t<0.13)return lerp(0.94,0.80,(t-0.06)/0.07);          // equino amplio
+    if(t<0.17)return lerp(0.80,0.72,(t-0.13)/0.04);          // collarín
+    if(t<0.90){const k=(t-0.17)/0.73;return lerp(0.72,0.54,k)+Math.sin(k*Math.PI)*0.014;} // fuste (angosta hacia abajo)
+    return lerp(0.54,0.60,(t-0.90)/0.10);                    // base compacta
+  }
+  let W,H,dpr,cell,M=null,FRAME=null;
+  function layout(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const co=new URLSearchParams(location.search).get('cell');
+    cell=co?Math.max(2,parseInt(co)):Math.max(3,Math.round(Math.min(W,H)/180));   // grilla fina = dither crisp; ?cell=N para assets
+    // templo tetrástilo, ancho, en el tercio superior-medio
+    const Hm=Math.min(H*0.62, W*0.40), Wm=Hm/0.62;
+    M={cx:W/2, top:H*0.085, Hm, Wm};
+    if(FRAME!==null){ draw(FRAME); document.title='ready'; }
+  }
+  // luminancia del templo (pedimento + cornisamento + 4 columnas + crepidoma)
+  function lumAt(px,py){
+    const {cx,top,Hm,Wm}=M, n=4;
+    const colAreaW=Wm*0.80, pitch=colAreaW/n, colHW=Math.min(pitch*0.32,Hm*0.072);
+    const c0=cx-colAreaW/2;
+    const cen=[]; for(let i=0;i<n;i++)cen.push(c0+pitch*(i+0.5));
+    const colSpreadHalf=(cen[n-1]-cen[0])/2+colHW, cornHalf=colSpreadHalf+pitch*0.32;
+    const pedTop=top,             pedH=Hm*0.20, pedBot=pedTop+pedH;
+    const entTop=pedBot,          entH=Hm*0.095, entBot=entTop+entH;
+    const colTop=entBot+Hm*0.006, colBot=top+Hm*0.86;
+    const crepTop=colBot,         crepH=Hm*0.14, crepBot=crepTop+crepH;
+    const d=Math.abs(px-cx); let lum=0;
+    if(py>=pedTop&&py<pedBot){const slope=cornHalf*(py-pedTop)/pedH;
+      if(d<=slope){lum=0.30; if(slope-d<colHW*0.5)lum=0.60;}}
+    if(py>=entTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);
+      lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);const ty=(py-entTop)/entH;if(ty<0.16||ty>0.84)lum=Math.max(lum,0.66*e);}
+    if(py>=colTop&&py<colBot){const t=(py-colTop)/(colBot-colTop),hwt=hw(t)*colHW;
+      for(let i=0;i<n;i++){const dx=Math.abs(px-cen[i]);if(dx<=hwt){
+        const round=1-Math.pow(dx/hwt,1.7),vert=1-t*0.24,left=px<cen[i]?1.05:0.9,
+        flute=(t>0.17&&t<0.90)?(0.93+0.07*Math.cos(dx/hwt*Math.PI*3.0)):1;
+        let cl=clamp((0.44+0.58*round)*vert*left*flute);const ef=(hwt-dx)/hwt;if(ef<0.12)cl*=ef/0.12;
+        lum=Math.max(lum,cl);}}}
+    if(py>=crepTop&&py<crepBot){const s=Math.floor((py-crepTop)/(crepH/3)),bh=cornHalf*(0.98+s*0.055);
+      if(d<=bh){let e=Math.min(1,((bh-d)/bh)/0.04);lum=Math.max(lum,0.5*e*(px<cx?1.02:0.94));}}
+    return lum;
+  }
+  function draw(T){
+    ctx.clearRect(0,0,W,H);
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    const twoPi=Math.PI*2;
+    const gx0=Math.floor((M.cx-M.Wm/2-cell*2)/cell), gx1=Math.ceil((M.cx+M.Wm/2+cell*2)/cell);
+    const gy0=Math.floor((M.top-cell)/cell), gy1=Math.ceil((M.top+M.Hm+cell)/cell);
+    for(let gy=gy0;gy<gy1;gy++){
+      for(let gx=gx0;gx<gx1;gx++){
+        const px=gx*cell+cell/2, py=gy*cell+cell/2;
+        let lum=lumAt(px,py), isEdge=false;
+        if(lum>0.14){ // borde de la silueta (el plano que se sostiene)
+          if(Math.min(lumAt(px+cell,py),lumAt(px-cell,py),lumAt(px,py+cell),lumAt(px,py-cell))<0.10) isEdge=true;
+        }
+        if(lum<=0.05){ // polvo efímero que orbita la estructura
+          if(lum<0.005){ const near=lumAt(px+cell,py)+lumAt(px-cell,py)+lumAt(px,py+cell)+lumAt(px,py-cell);
+            if(near>0.15){ const orb=0.5+0.5*Math.sin(twoPi*T+hash(gx,gy)*twoPi);
+              if(hash(gx*1.7,gy*1.3)<0.10*orb) lum=hash(gy,gx)*0.24*orb; } }
+          if(lum<=0.05) continue;
+        }
+        const seed=hash(gx,gy);
+        const flick=0.84+0.16*Math.sin(twoPi*T+seed*twoPi+gx*0.18+gy*0.14);
+        let L=lum*flick;
+        const bay=BAYER[gy&3][gx&3]/16;
+        if(L<bay*0.5 && !isEdge) continue;
+        if(isEdge) L=Math.max(L,0.55);
+        const col=mix(L);
+        if(!isEdge && hash(gx*1.3,gy*0.7)<0.11 && L>0.24){
+          const gi=(Math.floor(T*8+seed*8))%GLY.length;
+          ctx.globalAlpha=Math.min(1,L*0.92);ctx.fillStyle=col;
+          ctx.font=`${Math.round(cell*1.5)}px ui-monospace,Menlo,monospace`;
+          ctx.fillText(GLY[gi],px,py);
+        }else{
+          const s=cell*(isEdge?0.6:(0.44+0.5*L));
+          ctx.globalAlpha=Math.min(1,L*1.05);ctx.fillStyle=col;
+          ctx.fillRect(px-s/2,py-s/2,s,s);
+        }
+      }
+    }
+    ctx.globalAlpha=1;
+  }
+  const q=new URLSearchParams(location.search);
+  FRAME=q.has('t')?(((parseFloat(q.get('t'))%1)+1)%1):null;
+  layout(); window.addEventListener('resize',layout);
+  if(FRAME===null){const T0=performance.now();(function loop(now){draw(((now-T0)/6000)%1);requestAnimationFrame(loop);})(performance.now());}
+})();
+</script>
+</body>
+</html>

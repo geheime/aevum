@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="aevum">
+  <rect width="64" height="64" rx="13" fill="#0A0C10"/>
+  <g fill="#ECE6D6">
+    <!-- pedimento -->
+    <polygon points="32,10 54,23 10,23"/>
+    <!-- cornisamento -->
+    <rect x="10" y="23.4" width="44" height="3"/>
+    <!-- columnas atectónicas (angostas abajo, anchas arriba — minoicas) -->
+    <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/>
+    <polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
+    <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/>
+    <polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
+    <!-- estilóbato -->
+    <rect x="12" y="47.4" width="40" height="3"/>
+    <rect x="8"  y="50.8" width="48" height="3.6"/>
+  </g>
+</svg>
