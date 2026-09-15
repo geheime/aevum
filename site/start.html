@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.classList.add('js')</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>aevum · start</title>
+<meta name="description" content="How aevum works, and how to run it — the four artifacts of continuity and the boot/close loop.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="aevum · start">
+<meta property="og:description" content="How aevum works, and how to run it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://aevum-os.pages.dev/start">
+<meta property="og:image" content="https://aevum-os.pages.dev/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aevum-os.pages.dev/og-cover.png">
+<style>
+  :root{
+    --void:#0A0C10; --panel:#0d1016; --ink:#ECE6D6; --silver:#9FB2C6; --steel:#4C6076; --dim:#6F7C8A; --line:#1c2129;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+
+  /* masthead */
+  .top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+    padding:14px 24px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+    background:linear-gradient(to bottom,rgba(10,12,16,.85),rgba(10,12,16,0));backdrop-filter:blur(6px)}
+  .top b{color:var(--ink);font-weight:600;letter-spacing:.34em}
+  .top a{text-decoration:none;color:var(--dim);transition:color .2s} .top a:hover{color:var(--ink)}
+  .top .r{display:flex;gap:20px}
+
+  /* hero */
+  .hero{padding:132px 0 64px;text-align:center}
+  .hero .mark{width:56px;height:56px;margin:0 auto 26px;display:block;opacity:.95}
+  .hero .kick{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel);margin-bottom:18px}
+  .hero h1{font-size:clamp(26px,4.6vw,42px);font-weight:500;letter-spacing:-.01em;line-height:1.28}
+  .hero h1 .dim{color:var(--steel)}
+  .hero .lede{margin:22px auto 0;max-width:520px;font-size:13px;color:var(--silver)}
+
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:20px}
+  h2{font-size:clamp(20px,3.2vw,30px);font-weight:500;letter-spacing:-.01em;line-height:1.32;color:var(--ink)}
+  p{color:var(--silver);margin-top:16px;max-width:62ch;font-size:14px}
+  p .ink{color:var(--ink)}
+
+  /* stepped artifacts */
+  ol.steps{list-style:none;margin-top:34px;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  ol.steps li{background:var(--panel);padding:22px 22px 22px 62px;position:relative;min-width:0}
+  ol.steps li .num{position:absolute;left:20px;top:22px;font-size:12px;color:var(--steel);letter-spacing:.1em}
+  ol.steps li h3{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+  ol.steps li .role{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--steel);margin-top:3px}
+  ol.steps li p{font-size:13px;margin-top:10px;max-width:56ch}
+
+  /* the loop diagram */
+  .loop{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px;
+    padding:30px 20px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  .loop .node{border:1px solid var(--steel);border-radius:8px;padding:12px 16px;text-align:center;min-width:120px}
+  .loop .node b{display:block;color:var(--ink);font-size:14px;letter-spacing:.04em}
+  .loop .node span{display:block;color:var(--dim);font-size:11px;margin-top:5px}
+  .loop .arrow{color:var(--steel);font-size:18px}
+  .loop .node.cycle{border-style:dashed;border-color:var(--line)}
+  .loop .node.cycle b{color:var(--silver)}
+
+  /* install */
+  ol.install{list-style:none;margin-top:30px;display:grid;gap:20px;counter-reset:i}
+  ol.install li{counter-increment:i;padding-left:40px;position:relative;min-width:0}
+  pre{max-width:100%}
+  ol.install li::before{content:counter(i);position:absolute;left:0;top:-2px;width:26px;height:26px;border:1px solid var(--steel);
+    border-radius:50%;display:grid;place-items:center;font-size:12px;color:var(--silver)}
+  ol.install li h3{font-size:15px;font-weight:600;color:var(--ink)}
+  ol.install li p{font-size:13px;margin-top:7px}
+  pre{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;
+    font-size:13px;color:var(--silver);overflow-x:auto}
+  pre .c{color:var(--steel)}
+
+  .soon{margin-top:34px;padding:22px 24px;border:1px dashed var(--steel);border-radius:10px;background:rgba(76,96,118,.06)}
+  .soon .tag{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
+  .soon h3{font-size:16px;color:var(--ink);margin-top:8px;font-weight:600}
+  .soon p{font-size:13px;margin-top:8px}
+
+  ul.laws{list-style:none;margin-top:26px;display:grid;gap:16px}
+  ul.laws li{padding-left:22px;position:relative;color:var(--silver);font-size:14px}
+  ul.laws li::before{content:"›";position:absolute;left:0;color:var(--steel)}
+  ul.laws b{color:var(--ink);font-weight:600}
+
+  .cta{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:13px 20px;border:1px solid var(--steel);border-radius:8px;
+    color:var(--ink);text-decoration:none;font-size:13px;letter-spacing:.06em;transition:border-color .2s,background .2s}
+  .cta:hover{border-color:var(--silver);background:rgba(159,178,198,.05)}
+
+  footer{border-top:1px solid var(--line);padding:56px 0 64px;text-align:center;color:var(--steel);font-size:12px;letter-spacing:.06em}
+  footer .sig{color:var(--dim);letter-spacing:.12em;margin-top:10px}
+
+  /* motion */
+  html.js section .kick,html.js section h2,html.js section p,html.js section ol,
+  html.js section .loop,html.js section .soon,html.js section ul.laws,html.js section .cta{
+    opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  html.js section.in .kick,html.js section.in h2,html.js section.in p,html.js section.in ol,
+  html.js section.in .loop,html.js section.in .soon,html.js section.in ul.laws,html.js section.in .cta{opacity:1;transform:none}
+  section.in h2{transition-delay:.05s}section.in p{transition-delay:.1s}
+  section.in ol,section.in .loop{transition-delay:.15s}
+
+  @media(max-width:520px){
+    .hero{padding:112px 0 48px} section{padding:52px 0}
+    .top{letter-spacing:.14em} .loop{flex-direction:column} .loop .arrow{transform:rotate(90deg)}
+    ol.steps li{padding-left:56px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    html.js section .kick,html.js section h2,html.js section p,html.js section ol,
+    html.js section .loop,html.js section .soon,html.js section ul.laws,html.js section .cta{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span><b><a href="/" style="color:var(--ink);text-decoration:none">aevum</a></b></span>
+  <span class="r">
+    <a href="/">← home</a>
+    <a href="https://github.com/geheime/aevum" target="_blank" rel="noopener">github ↗</a>
+  </span>
+</div>
+
+<header class="hero"><div class="wrap">
+  <svg class="mark" viewBox="0 0 64 64" aria-label="aevum"><g fill="#ECE6D6">
+    <polygon points="32,10 54,23 10,23"/><rect x="10" y="23.4" width="44" height="3"/>
+    <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/><polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
+    <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
+    <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
+  </g></svg>
+  <div class="kick">start</div>
+  <h1>How aevum works, <span class="dim">and how to run it.</span></h1>
+  <p class="lede">Two parts. First the shape — the four artifacts that carry a project across the death of the instance working on it. Then the wiring — how you put it into your own Claude Code.</p>
+</div></header>
+
+<main>
+  <section><div class="wrap">
+    <div class="kick">part one — the shape</div>
+    <h2>Four artifacts carry the line.</h2>
+    <p>An AI coding instance is <span class="ink">mortal</span> — born without memory, dead when its context saturates. The project outlives it. aevum is the discipline that lets a fresh instance sit down and pick up exactly where the last one left off. It does that with four files.</p>
+    <ol class="steps">
+      <li><span class="num">01</span><h3>The baton</h3><div class="role">looks backward</div>
+        <p>The testimony one instance leaves the next — written from disk so it cannot drift into fiction. A fresh instance reads it first, then verifies it against the raw source before trusting a word.</p></li>
+      <li><span class="num">02</span><h3>The table</h3><div class="role">looks sideways</div>
+        <p>An append-only round-table where parallel instances coordinate right now. Each claims a front, releases it when done — so two agents never silently work the same thing. Seats sit down; the table is where they keep from colliding.</p></li>
+      <li><span class="num">03</span><h3>The lineage</h3><div class="role">looks down the generations</div>
+        <p>The genealogy, one node per close. Even after every working file is gone, the line of who-built-what stays legible.</p></li>
+      <li><span class="num">04</span><h3>The compare-and-swap</h3><div class="role">refuses the clobber</div>
+        <p>When two instances of the same role close at once, the CAS rejects the silent overwrite and asks the later one to merge. Nothing is lost to a race.</p></li>
+    </ol>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">part one — the loop</div>
+    <h2>Every session is the same two moves.</h2>
+    <p>You never re-explain the project. You <span class="ink">boot</span> — a fresh instance reads the baton, verifies it, and sits down in the seat. It works. Then it <span class="ink">closes</span> — leaving a new baton and adding a node to the lineage. The next instance repeats it. The project accumulates instead of restarting.</p>
+    <div class="loop">
+      <div class="node"><b>/boot</b><span>read the baton · verify · sit</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>work</b><span>the seat does the job</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>/close</b><span>leave the baton · log the line</span></div>
+      <div class="arrow">↺</div>
+      <div class="node cycle"><b>next instance</b><span>picks up the line</span></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">part two — run it yourself</div>
+    <h2>Wire it into your own Claude Code.</h2>
+    <p>aevum is open (MIT). Right now it installs as a <span class="ink">hands-on wiring</span> for someone comfortable in a terminal — you clone the repo, read the contract, and cable the rituals into your <code>.claude/</code>. The one-step plugin that does this for you is next (below).</p>
+    <ol class="install">
+      <li><h3>Have Claude Code</h3><p>aevum is a protocol for running Claude Code across many sessions. You need the CLI installed and a project to run it on.</p></li>
+      <li><h3>Clone the repo</h3><p>The whole protocol — spec, reference scripts, templates, tests — lives here.</p>
+        <pre><span class="c"># the protocol, in the open</span>
+git clone https://github.com/geheime/aevum</pre></li>
+      <li><h3>Read the contract</h3><p>Open <code>SPEC.md</code>. It defines the artifacts and the rituals precisely enough that an instance can execute against it. This is the source of truth — read the raw file, don't infer.</p></li>
+      <li><h3>Cable the rituals</h3><p>Wire the <code>/boot</code> and <code>/close</code> rituals and the reference scripts into your <code>.claude/</code>. Run the test suite to confirm each failure mode it defends against is reproduced and green.</p>
+        <pre><span class="c"># 20 checks: parser, reclaim, and the CAS</span>
+bash tests/run.sh</pre></li>
+    </ol>
+    <div class="soon">
+      <div class="tag">coming soon</div>
+      <h3>One-step install — your Claude conducts it.</h3>
+      <p>A Claude Code plugin (skills + slash-commands + hooks) that wires everything in a single step, and teaches your agent to drive the protocol on its own — detect a boot, leave the baton, refuse the clobber — without you steering each move. It has already been done by hand for one person; the plugin generalizes it. Watch the repo.</p>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="kick">the two mother laws</div>
+    <h2>If you keep only two rules, keep these.</h2>
+    <ul class="laws">
+      <li><b>Read the raw, don't infer from the output.</b> Before you claim something works or merged, go to the real source — the file, the git log, the browser. The baton can be wrong; verify it.</li>
+      <li><b>A patch you repeat is a missing piece.</b> If you fix the same thing every session, that is an unwritten rule. Write it down — as memory, a hook, a test — and stop patching.</li>
+    </ul>
+    <p style="margin-top:26px"><a class="cta" href="https://github.com/geheime/aevum" target="_blank" rel="noopener">Read the protocol on GitHub ↗</a></p>
+  </div></section>
+</main>
+
+<footer>
+  <div>aevum · begins, never ends.</div>
+  <div class="sig">— Designed by Humans · Built by Intelligence</div>
+</footer>
+
+<script>
+(() => {
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});
+  document.querySelectorAll('main section').forEach(s=>io.observe(s));
+})();
+</script>
+</body>
+</html>
