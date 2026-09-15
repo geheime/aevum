@@ -38,7 +38,7 @@
   /* ---- hero ---- */
   .hero{position:relative;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;padding-bottom:24px}
   #glyph{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:50svh auto 0;padding:0 24px}
+  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:56svh auto 0;padding:0 24px}
   .word{font-size:clamp(34px,7vw,66px);letter-spacing:.46em;padding-left:.46em;font-weight:500}
   .tag{margin-top:16px;font-size:clamp(9px,1.6vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--dim)}
   .lede{margin:24px auto 0;max-width:520px;font-size:13px;color:var(--silver);letter-spacing:.02em}
@@ -355,7 +355,7 @@
     cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
     const Wm=Math.min(W*0.82,H*0.50), Hm=Wm*0.62;   // ancho con margen; alto derivado
     cell=Math.max(2,Math.round(Wm/135));   // celda ATADA al templo (no al viewport): ratio Wm/cell≈135 = el de la og → el friso de discos resuelve limpio en cualquier pantalla
-    M={cx:W/2, top:H*0.46-Hm, Hm, Wm};   // base del templo ~46%; el wordmark arranca en 50svh → bloque centrado, gap limpio
+    M={cx:W/2, top:H*0.52-Hm, Hm, Wm};   // base del templo ~52%; el wordmark arranca en 56svh → bloque bajado ~6%, gap limpio
   }
   function lumAt(px,py){
     const {cx,top,Hm,Wm}=M,n=4;
