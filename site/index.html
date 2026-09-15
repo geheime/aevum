@@ -22,8 +22,9 @@
     --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--void);color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  html{scroll-behavior:smooth;background:var(--void)}
+  body{background:transparent;color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
   a{color:inherit}
   .wrap{max-width:840px;margin:0 auto;padding:0 24px}
 
@@ -35,9 +36,9 @@
   .top a{text-decoration:none;color:var(--dim);transition:color .2s} .top a:hover{color:var(--ink)}
 
   /* ---- hero ---- */
-  .hero{position:relative;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding-bottom:24px}
+  .hero{position:relative;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;padding-bottom:24px}
   #glyph{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:0 auto;padding:0 24px}
+  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:44svh auto 0;padding:0 24px}
   .word{font-size:clamp(34px,7vw,66px);letter-spacing:.46em;padding-left:.46em;font-weight:500}
   .tag{margin-top:16px;font-size:clamp(9px,1.6vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--dim)}
   .lede{margin:24px auto 0;max-width:520px;font-size:13px;color:var(--silver);letter-spacing:.02em}
@@ -184,6 +185,7 @@
 </style>
 </head>
 <body>
+<canvas id="stars" aria-hidden="true"></canvas>
 
 <div class="top">
   <span><b>aevum</b></span>
@@ -198,31 +200,31 @@
   <div class="herotext">
     <div class="word">aevum</div>
     <div class="tag">The instance is mortal · The project is not</div>
-    <div class="lede">A file protocol for running permanent projects with disposable agents — baton, table, lineage, and a compare-and-swap for multi-agent coordination.</div>
+    <div class="lede">A file protocol for running permanent projects with disposable agents — baton, round-table, lineage, and a compare-and-swap for multi-agent coordination.</div>
     <div class="scroll">scroll ↓</div>
   </div>
 </header>
 
 <main>
   <section><div class="wrap">
-    <div class="kick">01 — the problem</div>
+    <div class="kick tw">01 — the problem</div>
     <p class="big">An AI coding instance is <span class="dim">mortal</span> — born without memory, dead when its context window saturates. The project it works on outlives it by orders of magnitude.</p>
     <p><span class="ink">aevum</span> is the bridge: a protocol of externalized memory strict enough that a fresh instance sits down and picks up the line without losing anything. <span class="ink">The project accumulates instead of repeating.</span> <em>Aevum</em> is the scholastic word for the mode of being of something that has a beginning but no end.</p>
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">02 — the artifacts of continuity</div>
+    <div class="kick tw">02 — the artifacts of continuity</div>
     <h2>Three files carry the line, and a fourth stops it from being overwritten.</h2>
     <div class="arts">
       <div class="art"><div class="n">baton</div><h3>Looks backward</h3><p>The serial testimony one instance leaves the next, written from disk so it cannot drift. A fresh instance reads it first.</p></div>
-      <div class="art"><div class="n">table</div><h3>Looks sideways</h3><p>The append-only round-table where parallel instances coordinate right now — who is on what, so two agents don't collide.</p></div>
+      <div class="art"><div class="n">round-table</div><h3>Looks sideways</h3><p>The append-only round-table where parallel instances coordinate right now — who is on what, so two agents don't collide.</p></div>
       <div class="art"><div class="n">lineage</div><h3>Looks down the generations</h3><p>The genealogy, one node per close. The line is legible even after every working file is gone.</p></div>
       <div class="art"><div class="n">compare-and-swap</div><h3>Refuses the clobber</h3><p>When two same-role instances close at once, the CAS rejects the silent overwrite and asks the later one to merge. Nothing is lost.</p></div>
     </div>
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">03 — honesty</div>
+    <div class="kick tw">03 — honesty</div>
     <h2>I did not invent this shape. <span class="q">I recognized it.</span></h2>
     <p>None of the mechanisms are new. Aevum is:</p>
     <ul class="mech">
@@ -235,17 +237,17 @@
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">04 — the shape is four thousand years old</div>
+    <div class="kick tw">04 — the shape is four thousand years old</div>
     <h2>The instance is mortal. The project rises from its ruins.</h2>
     <p class="crete">The mark is a Minoan temple. Crete was a civilization the earthquakes destroyed again and again — <em>“after death and destruction, Crete rose from its ruins and began anew, over and over.”</em> Its columns are <em>atectonic</em>: narrower at the base, wider at the capital — the form carries the threat of collapse in its own shape, precarious by design, yet the structure holds and is rebuilt.</p>
     <p class="crete">And Crete's gift to the world was <span class="ink">its writing</span>. So the mark is built out of characters — a grid of type that forms the temple. What survives the mortal executor is what was written down.</p>
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">05 — run it yourself</div>
+    <div class="kick tw">05 — run it yourself</div>
     <h2>Every failure mode it defends against is a reproduced test.</h2>
     <pre><span class="c"># 20 checks across the parser, reclaim, and the CAS</span>
-bash tests/run.sh <span class="caret">▋</span></pre>
+<span class="tw">bash tests/run.sh</span><span class="caret">▋</span></pre>
     <div style="display:flex;flex-wrap:wrap;gap:12px">
       <a class="cta primary" href="/start">Start here — how it works →</a>
       <a class="cta" href="https://github.com/geheime/aevum" target="_blank" rel="noopener">Read the protocol on GitHub ↗</a>
@@ -300,6 +302,31 @@ bash tests/run.sh <span class="caret">▋</span></pre>
 </div>
 
 <script>
+/* faint far-background starfield — depth, very subtle */
+(() => {
+  const cv=document.getElementById('stars'),ctx=cv.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLS=[[159,178,198],[76,96,118],[111,124,138]];
+  let W,H,dpr,stars;
+  function layout(){
+    dpr=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.min(120,Math.round(W*H/15000));stars=[];
+    for(let i=0;i<n;i++){const d=Math.random();
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:0.5+d*1.3,base:0.04+d*0.12,
+        col:COLS[(Math.random()*COLS.length)|0],sp:0.4+Math.random()*1.1,ph:Math.random()*6.283});}
+  }
+  function draw(t){ctx.clearRect(0,0,W,H);
+    for(const s of stars){const a=s.base*(0.5+0.5*Math.sin(t*s.sp+s.ph));
+      ctx.globalAlpha=a;ctx.fillStyle=`rgb(${s.col[0]},${s.col[1]},${s.col[2]})`;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}
+    ctx.globalAlpha=1;}
+  layout();window.addEventListener('resize',layout);
+  if(reduce){draw(0.6);}else{const T0=performance.now();(function loop(now){draw((now-T0)/1000);requestAnimationFrame(loop);})(performance.now());}
+})();
+</script>
+
+<script>
 (() => {
   const cv=document.getElementById('glyph'), ctx=cv.getContext('2d');
   const INK=[236,230,214],SIL=[159,178,198],STE=[76,96,118];
@@ -323,8 +350,8 @@ bash tests/run.sh <span class="caret">▋</span></pre>
     W=window.innerWidth;H=window.innerHeight;   // viewport real (evita el clientWidth inflado por overflow)
     cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
     cell=Math.max(3,Math.round(Math.min(W,H)/150));
-    const Wm=Math.min(W*0.82,H*0.64), Hm=Wm*0.62;   // ancho con margen; alto derivado
-    M={cx:W/2, top:H*0.135, Hm, Wm};
+    const Wm=Math.min(W*0.82,H*0.50), Hm=Wm*0.62;   // ancho con margen; alto derivado
+    M={cx:W/2, top:H*0.40-Hm, Hm, Wm};   // base del templo ~40%; el wordmark arranca en 44svh → gap limpio, sin pisar el basamento
   }
   function lumAt(px,py){
     const {cx,top,Hm,Wm}=M,n=4;
@@ -372,8 +399,15 @@ bash tests/run.sh <span class="caret">▋</span></pre>
 
 <script>
 (() => {
+  // typewriter — only where it's diegetic (terminal commands, labels). Prose stays fade-in.
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const type=(el)=>{const t=el.dataset.tw||'';el.textContent='';let i=0;(function tick(){if(i<=t.length){el.textContent=t.slice(0,i);i++;setTimeout(tick,26+Math.random()*46);}})();};
+  if(!reduce){document.querySelectorAll('.tw').forEach(el=>{el.dataset.tw=el.textContent;el.textContent='';});
+    document.querySelectorAll('header .tw, .top .tw').forEach(type);}
   // reveal on scroll — observe the CONTENT (not the tall section) so it resolves mid-viewport
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.closest('section').classList.add('in');io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -14% 0px'});
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const s=e.target.closest('section');s.classList.add('in');
+    if(!reduce)s.querySelectorAll('.tw').forEach((el,k)=>setTimeout(()=>type(el),120+k*90));
+    io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -14% 0px'});
   document.querySelectorAll('main section .wrap').forEach(el=>io.observe(el));
   // authorship acta
   const seal=document.getElementById('seal'),bd=document.getElementById('actaBackdrop'),md=document.getElementById('actaModal'),cl=document.getElementById('actaClose');

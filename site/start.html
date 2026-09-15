@@ -21,8 +21,9 @@
     --ease:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--void);color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  html{scroll-behavior:smooth;background:var(--void)}
+  body{background:transparent;color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
   a{color:inherit}
   .wrap{max-width:760px;margin:0 auto;padding:0 24px}
 
@@ -77,6 +78,8 @@
   pre{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;
     font-size:13px;color:var(--silver);overflow-x:auto}
   pre .c{color:var(--steel)}
+  .caret{color:var(--steel);animation:blink 1.15s steps(1) infinite}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
   .soon{margin-top:34px;padding:22px 24px;border:1px dashed var(--steel);border-radius:10px;background:rgba(76,96,118,.06)}
   .soon .tag{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
@@ -175,6 +178,7 @@
 </style>
 </head>
 <body>
+<canvas id="stars" aria-hidden="true"></canvas>
 
 <div class="top">
   <span><b><a href="/" style="color:var(--ink);text-decoration:none">aevum</a></b></span>
@@ -191,21 +195,21 @@
     <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
     <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
   </g></svg>
-  <div class="kick">start</div>
+  <div class="kick tw">start</div>
   <h1>How aevum works, <span class="dim">and how to run it.</span></h1>
   <p class="lede">Two parts. First the shape — the four artifacts that carry a project across the death of the instance working on it. Then the wiring — how you put it into your own Claude Code.</p>
 </div></header>
 
 <main>
   <section><div class="wrap">
-    <div class="kick">part one — the shape</div>
+    <div class="kick tw">part one — the shape</div>
     <h2>Four artifacts carry the line.</h2>
     <p>An AI coding instance is <span class="ink">mortal</span> — born without memory, dead when its context saturates. The project outlives it. aevum is the discipline that lets a fresh instance sit down and pick up exactly where the last one left off. It does that with four files.</p>
     <ol class="steps">
       <li><span class="num">01</span><h3>The baton</h3><div class="role">looks backward</div>
         <p>The testimony one instance leaves the next — written from disk so it cannot drift into fiction. A fresh instance reads it first, then verifies it against the raw source before trusting a word.</p></li>
-      <li><span class="num">02</span><h3>The table</h3><div class="role">looks sideways</div>
-        <p>An append-only round-table where parallel instances coordinate right now. Each claims a front, releases it when done — so two agents never silently work the same thing. Seats sit down; the table is where they keep from colliding.</p></li>
+      <li><span class="num">02</span><h3>The round-table</h3><div class="role">looks sideways</div>
+        <p>An append-only round-table where parallel instances coordinate right now. Each claims a front, releases it when done — so two agents never silently work the same thing. Seats sit down; the round-table is where they keep from colliding.</p></li>
       <li><span class="num">03</span><h3>The lineage</h3><div class="role">looks down the generations</div>
         <p>The genealogy, one node per close. Even after every working file is gone, the line of who-built-what stays legible.</p></li>
       <li><span class="num">04</span><h3>The compare-and-swap</h3><div class="role">refuses the clobber</div>
@@ -214,7 +218,7 @@
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">part one — the loop</div>
+    <div class="kick tw">part one — the loop</div>
     <h2>Every session is the same two moves.</h2>
     <p>You never re-explain the project. You <span class="ink">boot</span> — a fresh instance reads the baton, verifies it, and sits down in the seat. It works. Then it <span class="ink">closes</span> — leaving a new baton and adding a node to the lineage. The next instance repeats it. The project accumulates instead of restarting.</p>
     <div class="loop">
@@ -229,18 +233,18 @@
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">part two — run it yourself</div>
+    <div class="kick tw">part two — run it yourself</div>
     <h2>Wire it into your own Claude Code.</h2>
     <p>aevum is open (MIT). Right now it installs as a <span class="ink">hands-on wiring</span> for someone comfortable in a terminal — you clone the repo, read the contract, and cable the rituals into your <code>.claude/</code>. The one-step plugin that does this for you is next (below).</p>
     <ol class="install">
       <li><h3>Have Claude Code</h3><p>aevum is a protocol for running Claude Code across many sessions. You need the CLI installed and a project to run it on.</p></li>
       <li><h3>Clone the repo</h3><p>The whole protocol — spec, reference scripts, templates, tests — lives here.</p>
         <pre><span class="c"># the protocol, in the open</span>
-git clone https://github.com/geheime/aevum</pre></li>
+<span class="tw">git clone https://github.com/geheime/aevum</span><span class="caret">▋</span></pre></li>
       <li><h3>Read the contract</h3><p>Open <code>SPEC.md</code>. It defines the artifacts and the rituals precisely enough that an instance can execute against it. This is the source of truth — read the raw file, don't infer.</p></li>
       <li><h3>Cable the rituals</h3><p>Wire the <code>/boot</code> and <code>/close</code> rituals and the reference scripts into your <code>.claude/</code>. Run the test suite to confirm each failure mode it defends against is reproduced and green.</p>
         <pre><span class="c"># 20 checks: parser, reclaim, and the CAS</span>
-bash tests/run.sh</pre></li>
+<span class="tw">bash tests/run.sh</span><span class="caret">▋</span></pre></li>
     </ol>
     <div class="soon">
       <div class="tag">coming soon</div>
@@ -250,7 +254,7 @@ bash tests/run.sh</pre></li>
   </div></section>
 
   <section><div class="wrap">
-    <div class="kick">the two mother laws</div>
+    <div class="kick tw">the two mother laws</div>
     <h2>If you keep only two rules, keep these.</h2>
     <ul class="laws">
       <li><b>Read the raw, don't infer from the output.</b> Before you claim something works or merged, go to the real source — the file, the git log, the browser. The baton can be wrong; verify it.</li>
@@ -307,8 +311,39 @@ bash tests/run.sh</pre></li>
 </div>
 
 <script>
+/* faint far-background starfield — depth, very subtle */
 (() => {
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.closest('section').classList.add('in');io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -14% 0px'});
+  const cv=document.getElementById('stars'),ctx=cv.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLS=[[159,178,198],[76,96,118],[111,124,138]];
+  let W,H,dpr,stars;
+  function layout(){
+    dpr=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.min(120,Math.round(W*H/15000));stars=[];
+    for(let i=0;i<n;i++){const d=Math.random();
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:0.5+d*1.3,base:0.04+d*0.12,
+        col:COLS[(Math.random()*COLS.length)|0],sp:0.4+Math.random()*1.1,ph:Math.random()*6.283});}
+  }
+  function draw(t){ctx.clearRect(0,0,W,H);
+    for(const s of stars){const a=s.base*(0.5+0.5*Math.sin(t*s.sp+s.ph));
+      ctx.globalAlpha=a;ctx.fillStyle=`rgb(${s.col[0]},${s.col[1]},${s.col[2]})`;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}
+    ctx.globalAlpha=1;}
+  layout();window.addEventListener('resize',layout);
+  if(reduce){draw(0.6);}else{const T0=performance.now();(function loop(now){draw((now-T0)/1000);requestAnimationFrame(loop);})(performance.now());}
+})();
+</script>
+
+<script>
+(() => {
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const type=(el)=>{const t=el.dataset.tw||'';el.textContent='';let i=0;(function tick(){if(i<=t.length){el.textContent=t.slice(0,i);i++;setTimeout(tick,26+Math.random()*46);}})();};
+  if(!reduce){document.querySelectorAll('.tw').forEach(el=>{el.dataset.tw=el.textContent;el.textContent='';});
+    document.querySelectorAll('header .tw').forEach(type);}
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const s=e.target.closest('section');s.classList.add('in');
+    if(!reduce)s.querySelectorAll('.tw').forEach((el,k)=>setTimeout(()=>type(el),120+k*90));
+    io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -14% 0px'});
   document.querySelectorAll('main section .wrap').forEach(el=>io.observe(el));
   const seal=document.getElementById('seal'),bd=document.getElementById('actaBackdrop'),md=document.getElementById('actaModal'),cl=document.getElementById('actaClose');
   const open=()=>{bd.classList.add('is-open');md.classList.add('is-open');md.setAttribute('aria-hidden','false');cl.focus();};
