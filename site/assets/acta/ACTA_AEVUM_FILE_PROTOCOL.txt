@@ -1,0 +1,42 @@
+AUTHORSHIP RECORD — AEVUM (FILE PROTOCOL)
+========================================================================
+
+THE WORK
+------------------------------------------------------------------------
+aevum — a file protocol for running permanent projects with disposable
+agents. The instance is mortal; the project is not. The protocol
+externalizes continuity into written artifacts: the baton (serial
+testimony that looks backward), the table (the append-only board where
+parallel instances coordinate), the lineage (the genealogy across
+generations), and a compare-and-swap that refuses the silent overwrite.
+
+AUTHOR
+------------------------------------------------------------------------
+Sebastián Vizzo — BAST studio.
+Rosario, Argentina. GitHub: geheime · seba.vizzo@gmail.com
+
+LICENSE
+------------------------------------------------------------------------
+MIT. Released in the open at github.com/geheime/aevum
+
+VERIFIABLE EVIDENCE OF PRIORITY (third-party record)
+------------------------------------------------------------------------
+Repository  : github.com/geheime/aevum
+First commit: 20ca5f856568dc88ddd4d083233ad27524e5b59a
+Date author : 2026-09-14 15:27:07 -0300 (GitHub server timestamp)
+
+The commit timestamps are stamped by GitHub's infrastructure and are
+not controlled by the author, so they constitute independent proof that
+aevum existed, as a formalized protocol, no later than 14 September 2026.
+
+PURPOSE OF THIS DOCUMENT
+------------------------------------------------------------------------
+This record is anchored with OpenTimestamps (a cryptographic proof on
+the Bitcoin blockchain) to leave independent, decentralized evidence of
+its content as of the sealing date. The seal does not replace the commit
+evidence of priority cited above: it complements it, fixing the
+consolidated state of the protocol and its authorship at this date.
+
+Issued: September 2026.
+
+— Designed by Humans · Built by Intelligence

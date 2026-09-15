@@ -114,6 +114,64 @@
     html.js section .kick,html.js section h2,html.js section p,html.js section ol,
     html.js section .loop,html.js section .soon,html.js section ul.laws,html.js section .cta{opacity:1!important;transform:none!important}
   }
+
+  /* ---- canonical footer + seal + acta (same as home) ---- */
+  @property --foil{syntax:'<angle>';initial-value:0deg;inherits:false}
+  .foot{border-top:1px solid var(--line);padding:clamp(48px,6vw,72px) 24px;display:flex;flex-direction:row;
+    align-items:center;justify-content:center;gap:22px;text-align:left}
+  .foot .sign-block{display:flex;flex-direction:column;gap:5px}
+  .foot .sign{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--silver);margin:0}
+  .foot .meta{font-size:10px;letter-spacing:.16em;color:var(--dim);padding-left:16.8px;margin:0}
+  .foot .socials{display:flex;align-items:center;gap:16px;margin-left:8px}
+  .foot .socials a{display:block;width:17px;height:17px;color:var(--dim);transition:color .3s,transform .3s}
+  .foot .socials a:hover{color:var(--ink);transform:translateY(-2px)}
+  .foot .socials svg{width:100%;height:100%;fill:currentColor;display:block}
+  button.seal{width:84px;height:84px;position:relative;padding:0;border:0;background:none;cursor:pointer;flex:0 0 auto;
+    border-radius:50%;transition:transform .4s var(--ease)}
+  button.seal:hover{transform:scale(1.045)}
+  button.seal:focus-visible{outline:1px solid var(--silver);outline-offset:6px}
+  .seal svg.ring{position:absolute;inset:0;width:100%;height:100%;transform-origin:50% 50%;animation:ringSpin 34s linear infinite}
+  @keyframes ringSpin{to{transform:rotate(360deg)}}
+  .seal .ring-text{font-family:var(--mono);font-size:6.6px;letter-spacing:.26em;text-transform:uppercase;fill:var(--dim)}
+  .seal .core{position:absolute;inset:23%;border-radius:50%;
+    background:conic-gradient(from var(--foil,0deg),var(--steel),var(--silver),var(--ink),var(--silver),var(--steel));
+    filter:blur(6px) saturate(118%);opacity:.5;animation:foilCycle 9s linear infinite}
+  @keyframes foilCycle{to{--foil:360deg}}
+  .seal .core-glass{position:absolute;inset:23%;border-radius:50%;
+    background:rgba(159,178,198,.06);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    border:1px solid rgba(159,178,198,.30);display:grid;place-items:center;box-shadow:inset 0 1px 6px rgba(0,0,0,.4)}
+  .seal .core-glass svg{width:54%;height:54%;display:block}
+  .acta-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(10,12,16,.62);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .32s var(--ease)}
+  .acta-backdrop.is-open{opacity:1;pointer-events:auto}
+  .acta-modal{position:fixed;z-index:1201;left:50%;top:50%;transform:translate(-50%,-46%) scale(.98);
+    opacity:0;pointer-events:none;width:min(520px,calc(100vw - 40px));max-height:min(86vh,680px);overflow-y:auto;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(24px,3.4vw,36px);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.75);text-align:left;transition:opacity .32s var(--ease),transform .38s var(--ease)}
+  .acta-modal.is-open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+  .acta-modal .x{position:absolute;top:12px;right:14px;width:32px;height:32px;border:0;background:none;
+    border-radius:50%;font-size:16px;color:var(--dim);cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s}
+  .acta-modal .x:hover{background:rgba(159,178,198,.08);color:var(--ink)}
+  .acta-modal .eyebrow{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--steel)}
+  .acta-modal .firma{font-size:clamp(16px,2.2vw,20px);color:var(--ink);letter-spacing:.01em;margin:12px 0 16px;line-height:1.4}
+  .acta-modal p{font-size:13px;color:var(--silver);margin:0 0 14px;max-width:none}
+  .acta-rows{border-top:1px solid var(--line);margin:18px 0 16px}
+  .acta-rows .r{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .acta-rows .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+  .acta-rows .v{font-size:12px;color:var(--ink);word-break:break-all}
+  .acta-rows .v a{color:var(--silver);text-decoration:underline;text-underline-offset:2px}
+  .acta-note{font-size:12px;line-height:1.65;color:var(--dim);padding-top:14px;border-top:1px dashed var(--line)}
+  .acta-note b{color:var(--silver)}
+  .acta-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+  .acta-actions a{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;
+    border:1px solid var(--steel);color:var(--ink);text-decoration:none;font-size:12px;letter-spacing:.04em;transition:border-color .2s,background .2s}
+  .acta-actions a:hover{border-color:var(--silver);background:rgba(159,178,198,.05)}
+  .cta.primary{background:var(--ink);color:var(--void);border-color:var(--ink);font-weight:600}
+  .cta.primary:hover{background:#fff;border-color:#fff;color:var(--void)}
+  @media(max-width:560px){
+    .foot{flex-direction:column;text-align:center;gap:20px}
+    .foot .sign-block{align-items:center}.foot .meta{padding-left:0}.foot .socials{margin-left:0;gap:22px}
+  }
 </style>
 </head>
 <body>
@@ -202,15 +260,61 @@ bash tests/run.sh</pre></li>
   </div></section>
 </main>
 
-<footer>
-  <div>aevum · begins, never ends.</div>
-  <div class="sig">— Designed by Humans · Built by Intelligence</div>
+<footer class="foot">
+  <button class="seal" id="seal" aria-label="Authorship record — open the acta" aria-haspopup="dialog">
+    <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+      <defs><path id="ringpath" d="M 60,14 A 46,46 0 1 1 59.99,14"/></defs>
+      <text class="ring-text"><textPath href="#ringpath" startOffset="0">AUTHORSHIP RECORD · SEALED ON BITCOIN · </textPath></text>
+    </svg>
+    <span class="core"></span>
+    <span class="core-glass">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#ECE6D6">
+        <polygon points="32,10 54,23 10,23"/><rect x="10" y="23.4" width="44" height="3"/>
+        <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/><polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
+        <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
+        <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
+      </g></svg>
+    </span>
+  </button>
+  <div class="sign-block">
+    <p class="sign">— Designed by Humans · Built by Intelligence</p>
+    <span class="meta">aevum · begins, never ends.</span>
+  </div>
+  <nav class="socials" aria-label="Links">
+    <a href="https://github.com/geheime/aevum" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 0 1 3-.405c1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    <a href="https://www.linkedin.com/in/seba-vizzo/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+  </nav>
 </footer>
+
+<div class="acta-backdrop" id="actaBackdrop"></div>
+<div class="acta-modal" id="actaModal" role="dialog" aria-modal="true" aria-labelledby="actaFirma" aria-hidden="true">
+  <button class="x" id="actaClose" aria-label="Close">✕</button>
+  <div class="eyebrow">Authorship record · aevum</div>
+  <div class="firma" id="actaFirma">— Designed by Humans · Built by Intelligence</div>
+  <p>aevum — the file protocol — released in the open under MIT. This record is anchored on the Bitcoin blockchain with OpenTimestamps, so its content and date can be verified independently by anyone, with no trust in the author.</p>
+  <div class="acta-rows">
+    <div class="r"><span class="k">author</span><span class="v">Sebastián Vizzo · BAST</span></div>
+    <div class="r"><span class="k">license</span><span class="v">MIT · <a href="https://github.com/geheime/aevum" target="_blank" rel="noopener">github.com/geheime/aevum</a></span></div>
+    <div class="r"><span class="k">sealed</span><span class="v">2026-09-15 · Bitcoin (OpenTimestamps)</span></div>
+    <div class="r"><span class="k">SHA-256</span><span class="v">b6afd7b2878024321e370b32a898b0d91ad03dd132b5664146f2d5b53f1bf457</span></div>
+  </div>
+  <div class="acta-note"><b>What anyone can verify:</b> download the record and its <code>.ots</code> proof and check them against the Bitcoin blockchain. <b>The protocol itself</b> is the public git history at the repository above — MIT, the code, the tests, the dates.</div>
+  <div class="acta-actions">
+    <a href="/assets/acta/ACTA_AEVUM_FILE_PROTOCOL.txt" target="_blank" rel="noopener">Read the record ↗</a>
+    <a href="/assets/acta/ACTA_AEVUM_FILE_PROTOCOL.txt.ots" download>Download the proof ↓</a>
+    <a href="https://opentimestamps.org" target="_blank" rel="noopener">How to verify ↗</a>
+  </div>
+</div>
 
 <script>
 (() => {
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});
-  document.querySelectorAll('main section').forEach(s=>io.observe(s));
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.closest('section').classList.add('in');io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -14% 0px'});
+  document.querySelectorAll('main section .wrap').forEach(el=>io.observe(el));
+  const seal=document.getElementById('seal'),bd=document.getElementById('actaBackdrop'),md=document.getElementById('actaModal'),cl=document.getElementById('actaClose');
+  const open=()=>{bd.classList.add('is-open');md.classList.add('is-open');md.setAttribute('aria-hidden','false');cl.focus();};
+  const close=()=>{bd.classList.remove('is-open');md.classList.remove('is-open');md.setAttribute('aria-hidden','true');seal.focus();};
+  seal.addEventListener('click',open);bd.addEventListener('click',close);cl.addEventListener('click',close);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&md.classList.contains('is-open'))close();});
 })();
 </script>
 </body>
