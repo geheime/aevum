@@ -38,7 +38,7 @@
   /* ---- hero ---- */
   .hero{position:relative;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;padding-bottom:24px}
   #glyph{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:44svh auto 0;padding:0 24px}
+  .herotext{position:relative;z-index:2;width:100%;max-width:600px;margin:50svh auto 0;padding:0 24px}
   .word{font-size:clamp(34px,7vw,66px);letter-spacing:.46em;padding-left:.46em;font-weight:500}
   .tag{margin-top:16px;font-size:clamp(9px,1.6vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--dim)}
   .lede{margin:24px auto 0;max-width:520px;font-size:13px;color:var(--silver);letter-spacing:.02em}
@@ -47,7 +47,7 @@
 
   /* ---- sections ---- */
   section{padding:96px 0;border-top:1px solid var(--line)}
-  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:22px;min-height:1.6em}
   h2{font-size:clamp(22px,3.4vw,34px);font-weight:500;letter-spacing:-.01em;line-height:1.3;color:var(--ink)}
   h2 .q{color:var(--silver)}
   p{color:var(--silver);margin-top:18px;max-width:64ch}
@@ -189,7 +189,7 @@
 
 <div class="top">
   <span><b>aevum</b></span>
-  <span style="display:flex;gap:20px">
+  <span style="display:flex;gap:20px;align-items:center">
     <a href="/start" class="pill">start ↗</a>
     <a href="https://github.com/geheime/aevum" target="_blank" rel="noopener">github ↗</a>
   </span>
@@ -264,10 +264,13 @@
     <span class="core"></span>
     <span class="core-glass">
       <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#ECE6D6">
-        <polygon points="32,10 54,23 10,23"/><rect x="10" y="23.4" width="44" height="3"/>
-        <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/><polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
-        <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
-        <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
+        <rect x="9" y="10" width="46" height="3.2"/>
+        <circle cx="18" cy="17.2" r="1.7"/><circle cx="28" cy="17.2" r="1.7"/><circle cx="38" cy="17.2" r="1.7"/><circle cx="48" cy="17.2" r="1.7"/>
+        <rect x="11" y="21.4" width="42" height="3"/>
+        <ellipse cx="18" cy="27" rx="3.8" ry="1.8"/><ellipse cx="28" cy="27" rx="3.8" ry="1.8"/><ellipse cx="38" cy="27" rx="3.8" ry="1.8"/><ellipse cx="48" cy="27" rx="3.8" ry="1.8"/>
+        <polygon points="15.6,30 20.4,30 19.6,46 16.4,46"/><polygon points="25.6,30 30.4,30 29.6,46 26.4,46"/>
+        <polygon points="35.6,30 40.4,30 39.6,46 36.4,46"/><polygon points="45.6,30 50.4,30 49.6,46 46.4,46"/>
+        <rect x="12" y="47" width="40" height="2.8"/><rect x="8" y="50.4" width="48" height="3.4"/>
       </g></svg>
     </span>
   </button>
@@ -329,6 +332,7 @@
 <script>
 (() => {
   const cv=document.getElementById('glyph'), ctx=cv.getContext('2d');
+  const ROOF=(new URLSearchParams(location.search).get('roof')==='pediment')?'pediment':'flat';  // default = Knossos pleno; ?roof=pediment = frontón
   const INK=[236,230,214],SIL=[159,178,198],STE=[76,96,118];
   const GLY=['·','.',':','+','=','*','×','#'];
   const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
@@ -351,22 +355,44 @@
     cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
     cell=Math.max(3,Math.round(Math.min(W,H)/150));
     const Wm=Math.min(W*0.82,H*0.50), Hm=Wm*0.62;   // ancho con margen; alto derivado
-    M={cx:W/2, top:H*0.40-Hm, Hm, Wm};   // base del templo ~40%; el wordmark arranca en 44svh → gap limpio, sin pisar el basamento
+    M={cx:W/2, top:H*0.46-Hm, Hm, Wm};   // base del templo ~46%; el wordmark arranca en 50svh → bloque centrado, gap limpio
   }
   function lumAt(px,py){
     const {cx,top,Hm,Wm}=M,n=4;
     const colAreaW=Wm*0.80,pitch=colAreaW/n,colHW=Math.min(pitch*0.32,Hm*0.072),c0=cx-colAreaW/2;
     const cen=[];for(let i=0;i<n;i++)cen.push(c0+pitch*(i+0.5));
     const colSpreadHalf=(cen[n-1]-cen[0])/2+colHW,cornHalf=colSpreadHalf+pitch*0.32;
-    const pedTop=top,pedH=Hm*0.20,pedBot=pedTop+pedH;
-    const entTop=pedBot,entH=Hm*0.095,entBot=entTop+entH;
-    const colTop=entBot+Hm*0.006,colBot=top+Hm*0.86;
-    const crepTop=colBot,crepH=Hm*0.14,crepBot=crepTop+crepH;
-    const d=Math.abs(px-cx);let lum=0;
-    if(py>=pedTop&&py<pedBot){const s=cornHalf*(py-pedTop)/pedH;if(d<=s){lum=0.30;if(s-d<colHW*0.5)lum=0.60;}}
-    if(py>=entTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);const ty=(py-entTop)/entH;if(ty<0.16||ty>0.84)lum=Math.max(lum,0.66*e);}
-    if(py>=colTop&&py<colBot){const t=(py-colTop)/(colBot-colTop),hwt=hw(t)*colHW;
-      for(let i=0;i<n;i++){const dx=Math.abs(px-cen[i]);if(dx<=hwt){const round=1-Math.pow(dx/hwt,1.7),vert=1-t*0.24,left=px<cen[i]?1.05:0.9,flute=(t>0.17&&t<0.90)?(0.93+0.07*Math.cos(dx/hwt*Math.PI*3.0)):1;let cl=clamp((0.44+0.58*round)*vert*left*flute);const ef=(hwt-dx)/hwt;if(ef<0.12)cl*=ef/0.12;lum=Math.max(lum,cl);}}}
+    const d=Math.abs(px-cx);let lum=0,entBot;
+    if(ROOF==='pediment'){
+      const pedTop=top,pedH=Hm*0.20,pedBot=pedTop+pedH,entTop=pedBot,entH=Hm*0.095;entBot=entTop+entH;
+      if(py>=pedTop&&py<pedBot){const s=cornHalf*(py-pedTop)/pedH;if(d<=s){lum=0.30;if(s-d<colHW*0.5)lum=0.60;}}
+      if(py>=entTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);const ty=(py-entTop)/entH;if(ty<0.14||ty>0.86)lum=Math.max(lum,0.66*e);}
+    } else {   // Knossos: cornisa con buñas + friso de discos + arquitrabe
+      const corniceTop=top,corniceH=Hm*0.044,corniceBot=corniceTop+corniceH;
+      const friezeTop=corniceBot+Hm*0.008,friezeH=Hm*0.088,friezeBot=friezeTop+friezeH;
+      const archTop=friezeBot+Hm*0.008,archH=Hm*0.040;entBot=archTop+archH;
+      if(py>=corniceTop&&py<corniceBot){const cw=cornHalf*1.04;if(d<=cw){const ty=(py-corniceTop)/corniceH;
+        if(!(Math.abs(ty-0.58)<0.12)){let e=Math.min(1,((cw-d)/cw)/0.05);let cl=0.54*e;if(ty<0.16||ty>0.9)cl=Math.max(cl,0.68*e);lum=Math.max(lum,cl*(px<cx?1.02:0.95));}}}   // buña ~0.58
+      if(py>=friezeTop&&py<friezeBot&&d<=cornHalf*0.98){const midY=(friezeTop+friezeBot)/2,discR=Hm*0.042,pitchD=Hm*0.135;
+        const idx=Math.round((px-cx)/pitchD),xc=cx+idx*pitchD,dd=Math.hypot(px-xc,py-midY);
+        if(dd<=discR){const cl=0.74*(dd<discR*0.70?1:(discR-dd)/(discR*0.30));lum=Math.max(lum,cl);}}   // friso de discos: pocos, grandes, redondos (gaps en void)
+      if(py>=archTop&&py<entBot&&d<=cornHalf){let e=Math.min(1,((cornHalf-d)/cornHalf)/0.05);lum=Math.max(lum,0.56*(px<cx?1.03:0.93)*e);if((py-archTop)/archH<0.22)lum=Math.max(lum,0.66*e);}
+    }
+    // capitel cushion (almohadón) + banda oscura + fuste
+    const capTop=entBot+Hm*0.004, capH=Hm*0.085, capBot=capTop+capH;
+    const capW=colHW*1.55, abH=capH*0.22, cuH=capH*0.46, abBot=capTop+abH, cuBot=abBot+cuH;
+    const colTop=capBot, colBot=top+Hm*0.86, crepTop=colBot,crepH=Hm*0.14,crepBot=crepTop+crepH;
+    if(py>=capTop&&py<colBot){
+      for(let i=0;i<n;i++){const dx=Math.abs(px-cen[i]);
+        if(py<capBot){
+          if(py<abBot){ if(dx<=capW*0.96){let cl=0.60*(px<cen[i]?1.04:0.92);const ef=(capW*0.96-dx)/(capW*0.96);if(ef<0.14)cl*=ef/0.14;lum=Math.max(lum,cl);} }        // ábaco
+          else if(py<cuBot){ const ty=(py-abBot)/cuH,hwcap=capW*(0.60+0.40*Math.sin(ty*Math.PI));                                                                          // cushion
+            if(dx<=hwcap){const round=1-Math.pow(dx/hwcap,1.8),left=px<cen[i]?1.06:0.9;let cl=clamp((0.46+0.56*round)*left);const ef=(hwcap-dx)/hwcap;if(ef<0.12)cl*=ef/0.12;lum=Math.max(lum,cl);} }
+          // banda oscura [cuBot,capBot): no se dibuja → celdas apagadas = la banda negra en negativo
+        } else { const t=(py-colTop)/(colBot-colTop),hwt=hw(t)*colHW;                                                                                                       // fuste
+          if(dx<=hwt){const round=1-Math.pow(dx/hwt,1.7),vert=1-t*0.24,left=px<cen[i]?1.05:0.9,flute=(t>0.17&&t<0.90)?(0.93+0.07*Math.cos(dx/hwt*Math.PI*3.0)):1;let cl=clamp((0.44+0.58*round)*vert*left*flute);const ef=(hwt-dx)/hwt;if(ef<0.12)cl*=ef/0.12;lum=Math.max(lum,cl);} }
+      }
+    }
     if(py>=crepTop&&py<crepBot){const s2=Math.floor((py-crepTop)/(crepH/3)),bh=cornHalf*(0.98+s2*0.055);if(d<=bh){let e=Math.min(1,((bh-d)/bh)/0.04);lum=Math.max(lum,0.5*e*(px<cx?1.02:0.94));}}
     return lum;
   }

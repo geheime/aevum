@@ -33,7 +33,7 @@
     background:linear-gradient(to bottom,rgba(10,12,16,.85),rgba(10,12,16,0));backdrop-filter:blur(6px)}
   .top b{color:var(--ink);font-weight:600;letter-spacing:.34em}
   .top a{text-decoration:none;color:var(--dim);transition:color .2s} .top a:hover{color:var(--ink)}
-  .top .r{display:flex;gap:20px}
+  .top .r{display:flex;gap:20px;align-items:center}
 
   /* hero */
   .hero{padding:132px 0 64px;text-align:center}
@@ -44,7 +44,7 @@
   .hero .lede{margin:22px auto 0;max-width:520px;font-size:13px;color:var(--silver)}
 
   section{padding:64px 0;border-top:1px solid var(--line)}
-  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:20px}
+  .kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel);margin-bottom:20px;min-height:1.6em}
   h2{font-size:clamp(20px,3.2vw,30px);font-weight:500;letter-spacing:-.01em;line-height:1.32;color:var(--ink)}
   p{color:var(--silver);margin-top:16px;max-width:62ch;font-size:14px}
   p .ink{color:var(--ink)}
@@ -190,10 +190,13 @@
 
 <header class="hero"><div class="wrap">
   <svg class="mark" viewBox="0 0 64 64" aria-label="aevum"><g fill="#ECE6D6">
-    <polygon points="32,10 54,23 10,23"/><rect x="10" y="23.4" width="44" height="3"/>
-    <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/><polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
-    <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
-    <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
+    <rect x="9" y="10" width="46" height="3.2"/>
+    <circle cx="18" cy="17.2" r="1.7"/><circle cx="28" cy="17.2" r="1.7"/><circle cx="38" cy="17.2" r="1.7"/><circle cx="48" cy="17.2" r="1.7"/>
+    <rect x="11" y="21.4" width="42" height="3"/>
+    <ellipse cx="18" cy="27" rx="3.8" ry="1.8"/><ellipse cx="28" cy="27" rx="3.8" ry="1.8"/><ellipse cx="38" cy="27" rx="3.8" ry="1.8"/><ellipse cx="48" cy="27" rx="3.8" ry="1.8"/>
+    <polygon points="15.6,30 20.4,30 19.6,46 16.4,46"/><polygon points="25.6,30 30.4,30 29.6,46 26.4,46"/>
+    <polygon points="35.6,30 40.4,30 39.6,46 36.4,46"/><polygon points="45.6,30 50.4,30 49.6,46 46.4,46"/>
+    <rect x="12" y="47" width="40" height="2.8"/><rect x="8" y="50.4" width="48" height="3.4"/>
   </g></svg>
   <div class="kick tw">start</div>
   <h1>How aevum works, <span class="dim">and how to run it.</span></h1>
@@ -273,10 +276,13 @@
     <span class="core"></span>
     <span class="core-glass">
       <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#ECE6D6">
-        <polygon points="32,10 54,23 10,23"/><rect x="10" y="23.4" width="44" height="3"/>
-        <polygon points="14.8,27 21.2,27 20.2,47 15.8,47"/><polygon points="24.8,27 31.2,27 30.2,47 25.8,47"/>
-        <polygon points="34.8,27 41.2,27 40.2,47 35.8,47"/><polygon points="44.8,27 51.2,27 50.2,47 45.8,47"/>
-        <rect x="12" y="47.4" width="40" height="3"/><rect x="8" y="50.8" width="48" height="3.6"/>
+        <rect x="9" y="10" width="46" height="3.2"/>
+        <circle cx="18" cy="17.2" r="1.7"/><circle cx="28" cy="17.2" r="1.7"/><circle cx="38" cy="17.2" r="1.7"/><circle cx="48" cy="17.2" r="1.7"/>
+        <rect x="11" y="21.4" width="42" height="3"/>
+        <ellipse cx="18" cy="27" rx="3.8" ry="1.8"/><ellipse cx="28" cy="27" rx="3.8" ry="1.8"/><ellipse cx="38" cy="27" rx="3.8" ry="1.8"/><ellipse cx="48" cy="27" rx="3.8" ry="1.8"/>
+        <polygon points="15.6,30 20.4,30 19.6,46 16.4,46"/><polygon points="25.6,30 30.4,30 29.6,46 26.4,46"/>
+        <polygon points="35.6,30 40.4,30 39.6,46 36.4,46"/><polygon points="45.6,30 50.4,30 49.6,46 46.4,46"/>
+        <rect x="12" y="47" width="40" height="2.8"/><rect x="8" y="50.4" width="48" height="3.4"/>
       </g></svg>
     </span>
   </button>
