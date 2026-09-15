@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mesa.sh — the MESA parser (live fronts + the 409 check).
+# roundtable.sh — the round-table parser (live fronts + the 409 check).
 #
 # WHY THIS IS A SCRIPT (do not re-inline it into the ritual text): the parser
 #   once lived embedded in the /boot and /close markdown. Its awk field refs
@@ -7,7 +7,7 @@
 #   ($1, $2, …): a boot with a multi-word argument replaces each awk $N with the
 #   Nth word of the arg → awk becomes `ev=<word>` → never matches CLAIM → prints
 #   "clean" WHILE LYING. Production bug 2026-07-17 (a false-clean with a live
-#   front sitting on the MESA). A real .sh has no slash-command expansion, so the
+#   front sitting on the round table). A real .sh has no slash-command expansion, so the
 #   $N are genuine awk fields. The ritual text only CALLS this script.
 #
 # STRUCTURAL PARSER (2026-09-04): the event is located BY PATTERN — the keyword
@@ -26,13 +26,13 @@
 #   inherited, not a 409. If it cannot find your CLAIM it does NOT infer: it
 #   warns and falls back to the full list (safe over-alarm, fail-loud).
 #
-# Fail-loud: if the MESA has data lines but 0 parseable events, it SHOUTS instead
+# Fail-loud: if the round table has data lines but 0 parseable events, it SHOUTS instead
 #   of saying "clean" — a false-clean is never again mistaken for clean.
 #
 # Usage:
-#   mesa.sh live      <MESA_FILE> [--tsv]                  # live fronts (CLAIM without RELEASE)
+#   roundtable.sh live      <ROUNDTABLE_FILE> [--tsv]            # live fronts (CLAIM without RELEASE)
 #                                                          #   --tsv: date \t role \t "role @ front" \t session (for reclaim.sh)
-#   mesa.sh check-409 <MESA_FILE> <ROLE> <SESSION> [SINCE] # other same-role instances since your CLAIM (close)
+#   roundtable.sh check-409 <ROUNDTABLE_FILE> <ROLE> <SESSION> [SINCE] # other same-role instances since your CLAIM (close)
 #                                                          #   SINCE = 'YYYY-MM-DD HH:MM' forces the bound (tests / seat with no CLAIM)
 #
 # — Designed by Humans · Built by Intelligence
@@ -40,10 +40,10 @@
 set -euo pipefail
 
 cmd="${1:-}"
-mesa="${2:-}"
+rt="${2:-}"
 
 usage() {
-  echo "uso: mesa.sh live <MESA_FILE> [--tsv]  |  mesa.sh check-409 <MESA_FILE> <ROL> <SESION> [DESDE]" >&2
+  echo "uso: roundtable.sh live <ROUNDTABLE_FILE> [--tsv]  |  roundtable.sh check-409 <ROUNDTABLE_FILE> <ROL> <SESION> [DESDE]" >&2
   exit 2
 }
 
@@ -84,10 +84,10 @@ function parse(line,   n, f, i, t, a, nx) {
 
 case "$cmd" in
   live)
-    [ -n "$mesa" ] || usage
+    [ -n "$rt" ] || usage
     tsv=0; [ "${3:-}" = "--tsv" ] && tsv=1
-    if [ ! -f "$mesa" ]; then
-      [ "$tsv" = 1 ] || echo "(no MESA yet — serial project or first use)"
+    if [ ! -f "$rt" ]; then
+      [ "$tsv" = 1 ] || echo "(no round table yet — serial project or first use)"
       exit 0
     fi
     awk -v tsv="$tsv" "$PARSE"'
@@ -101,7 +101,7 @@ case "$cmd" in
       }
       END {
         if (datalines > 0 && seen == 0) {
-          print "⚠ MESA ILLEGIBLE: " datalines " data line(s) but 0 parseable events."
+          print "⚠ ROUND TABLE UNREADABLE: " datalines " data line(s) but 0 parseable events."
           print "  Do NOT trust this — open the file by hand. (possible format/encoding drift)"
           exit 3
         }
@@ -119,16 +119,16 @@ case "$cmd" in
           else     print open[k]
           n++
         }
-        if (!n && !tsv) print "(0 live fronts — MESA clean)"
+        if (!n && !tsv) print "(0 live fronts — round table clean)"
       }
-    ' "$mesa"
+    ' "$rt"
     ;;
 
   check-409)
     rol="${3:-}"; me="${4:-}"; desde="${5:-}"
-    { [ -n "$mesa" ] && [ -n "$rol" ] && [ -n "$me" ]; } || usage
-    if [ ! -f "$mesa" ]; then
-      echo "✓ no MESA — no other instance; all clear"
+    { [ -n "$rt" ] && [ -n "$rol" ] && [ -n "$me" ]; } || usage
+    if [ ! -f "$rt" ]; then
+      echo "✓ no round table — no other instance; all clear"
       exit 0
     fi
     awk -v rol="$rol" -v me="$me" -v desde="$desde" "$PARSE"'
@@ -142,12 +142,12 @@ case "$cmd" in
       }
       END {
         if (datalines > 0 && events == 0) {
-          print "⚠ MESA ILLEGIBLE: " datalines " data line(s), 0 parsed — check by hand before writing the baton."
+          print "⚠ ROUND TABLE UNREADABLE: " datalines " data line(s), 0 parsed — check by hand before writing the baton."
           exit 3
         }
         if (desde == "") desde = myclaim
         if (desde == "") {
-          print "⚠ could not find your CLAIM (sesión " me ") on the MESA — no time bound: listing the ENTIRE history of your role (over-alarm). Pass SINCE as the 5th arg to bound it."
+          print "⚠ could not find your CLAIM (sesión " me ") on the round table — no time bound: listing the ENTIRE history of your role (over-alarm). Pass SINCE as the 5th arg to bound it."
         }
         cnt = 0
         for (i = 1; i <= n; i++) {
@@ -156,11 +156,11 @@ case "$cmd" in
           cnt++
         }
         if (!cnt) {
-          if (desde != "") print "✓ no other instance of your role wrote to the MESA since your CLAIM (" desde ") — all clear"
+          if (desde != "") print "✓ no other instance of your role wrote to the round table since your CLAIM (" desde ") — all clear"
           else             print "✓ no other instance of your role — all clear"
         }
       }
-    ' "$mesa"
+    ' "$rt"
     ;;
 
   *) usage ;;

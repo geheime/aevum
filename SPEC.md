@@ -35,14 +35,14 @@ Containment hierarchy: **brand › house › seat (role × front)**.
 - **Role** — *who you are*: the function (e.g. `dev`, `arch`, `pm`). By function, not person.
 - **Front** — *what you are on*: the task/worktree of the moment.
 - **House** — the repo/folder of one unit of work with a life of its own, holding
-  its own state, batons, MESA and lineage. A seat lives inside a house.
+  its own state, batons, round table and lineage. A seat lives inside a house.
 - **Brand** — the umbrella over several houses. A brand is not a house.
 - **Generation (gen)** — the occupant counter of a seat, per house × role (§2.3).
 - **Baton** — the serial testimony a dying instance leaves the next.
-- **MESA** — the parallel/live board where instances working right now coordinate.
+- **Round table** — the parallel/live board where instances working right now coordinate.
 - **Lineage** — the genealogy, one node per close.
 
-Three artifacts of continuity: **baton** (serial — backward), **MESA** (parallel
+Three artifacts of continuity: **baton** (serial — backward), **round table** (parallel
 — sideways), **lineage** (genealogical — across all generations).
 
 ---
@@ -54,7 +54,7 @@ A **house** is any directory containing the harness files:
 ```
 <house>/
 ├── _BATON_<role>.md     # serial testimony, one per role/seat
-├── _MESA.md             # the live coordination board (one per house)
+├── _ROUNDTABLE.md       # the live coordination board (one per house)
 ├── _LINAJE.md           # the genealogy (one per house)
 └── …                    # the house's actual work
 ```
@@ -65,7 +65,7 @@ The witness one instance leaves at death so the next resumes the line. One file
 per **role**. Contract:
 
 - **Written from disk, not from memory.** Before writing, re-read the raw state
-  (git, tracker, MESA) and reconstruct from what is *actually there*. A baton
+  (git, tracker, round table) and reconstruct from what is *actually there*. A baton
   that summarizes belief instead of disk is the primary failure mode.
 - **It indexes; it does not re-narrate.** It points at the source of truth.
 - **A role may hold several live fronts at once** (§2.2). The baton therefore
@@ -76,7 +76,7 @@ per **role**. Contract:
 - **Writes go through compare-and-swap** (§3.2, §4) so two instances of the same
   role closing at once cannot silently overwrite each other.
 
-### 2.2 MESA — `_MESA.md`
+### 2.2 Round table — `_ROUNDTABLE.md`
 
 The live board. **Append-only**: add at the bottom, never edit or delete a line
 above. One event per line, fields separated by ` · `:
@@ -102,11 +102,11 @@ above. One event per line, fields separated by ` · `:
 - **session id** — see §5.1. It is written verbatim after `sesión `.
 - **Atomic append.** Concurrent instances must append with a single atomic write
   (`printf … >> file`, O_APPEND). Interleaved partial writes corrupt a line.
-- **Fail-loud.** Data lines that do not parse are reported (`⚠ N ignorada(s)`),
-  never dropped silently; zero parseable events among data lines is `⚠ MESA
-  ILEGIBLE`. A silent false-clean is the one outcome the system forbids.
+- **Fail-loud.** Data lines that do not parse are reported (`⚠ N ignored`),
+  never dropped silently; zero parseable events among data lines is `⚠ ROUND
+  TABLE UNREADABLE`. A silent false-clean is the one outcome the system forbids.
 
-Reference parser: [`bin/mesa.sh`](bin/mesa.sh) (§4).
+Reference parser: [`bin/roundtable.sh`](bin/roundtable.sh) (§4).
 
 ### 2.3 Lineage — `_LINAJE.md` & generation counting
 
@@ -136,9 +136,9 @@ how it is invoked is the host's business. Reference wording:
 2. **Triple-check** it against the raw source (git, tracker). The baton can lie;
    read the raw datum, do not infer from a summary.
 3. **Reclaim orphans** left by dirty deaths (§3.3).
-4. **Read the MESA** for live fronts that collide with yours.
+4. **Read the round table** for live fronts that collide with yours.
 5. **Plan before touching anything.** Only act on approval.
-6. **On starting real work, append your `CLAIM`** to the MESA. Until you do, your
+6. **On starting real work, append your `CLAIM`** to the round table. Until you do, your
    front is not LIVE and your later `close` has no anchor.
 
 Founding: no baton for your role → you are founding that seat (`gen 1`); its
@@ -147,14 +147,14 @@ boot sha is `NONE`.
 ### 3.2 close — standing up
 
 1. **Log** the session and distill durable lessons.
-2. **Reconcile against disk.** Re-read git + MESA + batons.
+2. **Reconcile against disk.** Re-read git + round table + batons.
 3. **Emit the baton through compare-and-swap.** Write it with `baton-cas.sh
    write <baton> <boot-sha>` (§4). If the sha still matches your boot, the write
    lands atomically. If it changed, another same-role instance closed while you
    worked: the CAS **refuses to overwrite** and tells you to **merge** its
    testimony with yours and retry with the new sha. This is the concrete form of
    "you merge, you do not overwrite."
-4. **`RELEASE`** your front on the MESA (reproducing your CLAIM's key exactly).
+4. **`RELEASE`** your front on the round table (reproducing your CLAIM's key exactly).
 5. **Append** a node to the lineage (`gen <N>`).
 
 ### 3.3 The dirty death (reclaim)
@@ -177,10 +177,10 @@ Reference: [`adapters/claude-code/reclaim.sh`](adapters/claude-code/reclaim.sh).
 
 ## 4. Tools (portable)
 
-**[`bin/mesa.sh`](bin/mesa.sh)** — the MESA parser. `bash` + `awk`, env-parameterized.
+**[`bin/roundtable.sh`](bin/roundtable.sh)** — the round-table parser. `bash` + `awk`, env-parameterized.
 ```
-mesa.sh live      <MESA_FILE> [--tsv]                  # live fronts (CLAIM without RELEASE)
-mesa.sh check-409 <MESA_FILE> <ROLE> <SESSION> [SINCE] # other same-role instances since your CLAIM
+roundtable.sh live      <ROUNDTABLE_FILE> [--tsv]                  # live fronts (CLAIM without RELEASE)
+roundtable.sh check-409 <ROUNDTABLE_FILE> <ROLE> <SESSION> [SINCE] # other same-role instances since your CLAIM
 ```
 
 **[`bin/baton-cas.sh`](bin/baton-cas.sh)** — compare-and-swap for the baton.
@@ -215,9 +215,9 @@ per-invocation host returns its own last-recorded heartbeat.
 A way to invoke `boot` and `close` (optionally `log`).
 
 ### 5.4 (optional) Guards
-Hooks that enforce the invariants — append-only MESA, plan-before-touch. Without
+Hooks that enforce the invariants — append-only round table, plan-before-touch. Without
 them, append-only is honor-based (see Known Limitations). The reference adapter
-ships a MESA append-guard.
+ships a round-table append-guard.
 
 Everything else — the file protocol, the parsers, the templates, the tests — is
 shared and host-agnostic.
@@ -231,12 +231,12 @@ shared and host-agnostic.
 $ baton-cas.sh sha _BATON_dev.md            → 7f3a…  (the gen-2 testimony)
 
 # it triple-checks, reclaims, then CLAIMs and works:
-_MESA.md ← 2026-09-14 10:00 · dev @ deploy prod · CLAIM · sesión 91af2c · roll v2
+_ROUNDTABLE.md ← 2026-09-14 10:00 · dev @ deploy prod · CLAIM · sesión 91af2c · roll v2
 
 # it closes. Nobody else touched the baton, so the CAS lands:
 $ baton-cas.sh write _BATON_dev.md 7f3a… < new_baton     → ✓ (CAS ok)
-_MESA.md   ← 2026-09-14 12:30 · dev @ deploy prod · RELEASE · sesión 91af2c · shipped
-_LINAJE.md ← gen 3 · 2026-09-14 · shipped deploy v2
+_ROUNDTABLE.md ← 2026-09-14 12:30 · dev @ deploy prod · RELEASE · sesión 91af2c · shipped
+_LINAJE.md     ← gen 3 · 2026-09-14 · shipped deploy v2
 
 # had a parallel dev closed first, the CAS would have refused gen 3's write and
 # told it to merge — the lost generation the old advisory "409" could not stop.
@@ -257,11 +257,11 @@ Honest edges, not hidden:
   ambiguous rather than guessing; a *single* wrong match still can't be caught at
   this layer. Longer ids (§5.1) are the real fix.
 - **Append-only is hook-enforced, not cryptographic.** A careless rewrite of the
-  MESA (a merge conflict, an agent "tidying") can still delete a line. The guard
+  round table (a merge conflict, an agent "tidying") can still delete a line. The guard
   (§5.4) is best-effort; there is no hash chain.
 - **No mutex.** A `CLAIM` records *who is sitting*, it is not a lock. Two
   instances can claim the same front; the collision surfaces on the next boot's
-  MESA read and is resolved by judgment, not by mechanism.
+  round table read and is resolved by judgment, not by mechanism.
 - **One baton per role vs. many live fronts.** The baton indexes several fronts
   (§2.1), but partitioning one file cleanly across many *simultaneous* same-role
   fronts is a sharp edge, not a solved problem.

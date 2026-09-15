@@ -24,7 +24,7 @@ Two details from that text are load-bearing here:
 2. **Writing is Crete's legacy.** *"Y el mundo le debe otro maravilloso legado a Creta: su
    escritura."* So the mark is built **out of characters** — a grid of typographic cells
    that form the temple. What survives the mortal executor is what was written down. The
-   protocol externalizes memory into written artifacts (baton, MESA, lineage); the logo
+   protocol externalizes memory into written artifacts (baton, round table, lineage); the logo
    says the same thing in stone made of type.
 
 ## The mark, two states

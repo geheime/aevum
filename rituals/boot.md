@@ -11,10 +11,10 @@ until you have a plan.
    baton can lie: an instance may have inferred instead of read. Flag every
    discrepancy before proceeding.
 4. **Reclaim orphans** left by dirty deaths, and surface them:
-   `adapters/<host>/reclaim.sh all <house>/_MESA.md`
+   `adapters/<host>/reclaim.sh all <house>/_ROUNDTABLE.md`
    A human decides the reclaim; you only report.
-5. **Read the live MESA** for fronts that collide with yours:
-   `bin/mesa.sh live <house>/_MESA.md`
+5. **Read the live round table** for fronts that collide with yours:
+   `bin/roundtable.sh live <house>/_ROUNDTABLE.md`
 6. **Plan.** Present who you are, the verified state, and one concrete next
    action. Act only on approval.
 7. **On starting real work, append your CLAIM** (until you do, your front is not
@@ -22,7 +22,7 @@ until you have a plan.
    ```
    printf '%s · %s @ %s · CLAIM · sesión %s · %s\n' \
      "$(date '+%Y-%m-%d %H:%M')" "<role>" "<front>" "<session-id>" "<note>" \
-     >> <house>/_MESA.md
+     >> <house>/_ROUNDTABLE.md
    ```
 
 **Founding:** no baton for your role → you are founding the seat (`gen 1`); its
